@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Auto Tech Service | Knoxville's #1 Mobile Mechanic | (865) 337-5911</title>
+    <meta name="description" content="Knoxville's top-rated mobile mechanic. We come to you! 610+ five-star reviews. Oil changes, brake repair, A/C service, engine diagnostics & more. Call (865) 337-5911.">
+    <meta name="keywords" content="mobile mechanic knoxville, mobile auto repair knoxville tn, car repair at home knoxville, oil change knoxville, brake repair knoxville, mobile auto tech">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Mobile Auto Tech Service | Knoxville's #1 Mobile Mechanic">
+    <meta property="og:description" content="We come to YOU. 610+ five-star reviews. Expert auto repair at your home or workplace. Call (865) 337-5911.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://benlee2144.github.io/mobile-auto-tech-knoxville/">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "AutoRepair",
+        "name": "Mobile Auto Tech Service Center",
+        "image": "",
+        "telephone": "(865) 337-5911",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "8403 Kingston Pike, Ste C",
+            "addressLocality": "Knoxville",
+            "addressRegion": "TN",
+            "postalCode": "37919",
+            "addressCountry": "US"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 35.9340,
+            "longitude": -84.0280
+        },
+        "url": "https://benlee2144.github.io/mobile-auto-tech-knoxville/",
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+                "opens": "09:00",
+                "closes": "19:00"
+            }
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "610"
+        },
+        "priceRange": "$$",
+        "description": "Knoxville's top-rated mobile mechanic service. We come to your home or workplace for all auto repairs and maintenance."
+    }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+    
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1040a8;
+            --primary-light: #e8effc;
+            --accent: #f59e0b;
+            --accent-dark: #d97706;
+            --dark: #111827;
+            --gray-900: #1f2937;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --white: #ffffff;
+            --success: #10b981;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-300);
+            transition: all 0.3s;
+        }
+        .nav.scrolled { box-shadow: var(--shadow); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 72px;
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1.3rem; color: var(--dark);
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+        }
+        .logo-icon {
+            width: 40px; height: 40px; background: var(--primary);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem; font-weight: 800;
+        }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--gray-700);
+            font-weight: 500; font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            background: var(--primary); color: white !important;
+            padding: 10px 24px; border-radius: 8px;
+            font-weight: 600; transition: all 0.2s;
+            text-decoration: none;
+        }
+        .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .hamburger {
+            display: none; background: none; border: none;
+            cursor: pointer; padding: 4px;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: var(--dark); margin: 6px 0;
+            transition: all 0.3s;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+        /* ===== MOBILE NAV ===== */
+        .mobile-menu {
+            display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+            background: white; z-index: 999; padding: 24px;
+            flex-direction: column; gap: 0;
+        }
+        .mobile-menu.active { display: flex; }
+        .mobile-menu a {
+            padding: 16px 0; border-bottom: 1px solid var(--gray-100);
+            text-decoration: none; color: var(--gray-900);
+            font-size: 1.1rem; font-weight: 500;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1a56db 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .hero-inner {
+            max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 16px; border-radius: 100px;
+            color: var(--accent); font-weight: 600; font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+        .hero-badge .stars { letter-spacing: 2px; }
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem; font-weight: 800; color: white;
+            line-height: 1.1; margin-bottom: 20px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            color: rgba(255,255,255,0.8); font-size: 1.2rem;
+            margin-bottom: 36px; max-width: 500px;
+        }
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 16px 32px; border-radius: 10px;
+            font-weight: 600; font-size: 1.05rem;
+            text-decoration: none; transition: all 0.3s;
+            border: none; cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--accent); color: var(--dark);
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+        .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+        .btn-outline {
+            background: transparent; color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+        /* Hero Right - Stats */
+        .hero-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px; padding: 28px; text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .stat-card .number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800; color: white;
+        }
+        .stat-card .label {
+            color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 4px;
+        }
+        .stat-card.highlight {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        .stat-card.highlight .number { color: var(--accent); }
+
+        /* ===== TRUST BAR ===== */
+        .trust-bar {
+            background: white; border-bottom: 1px solid var(--gray-100);
+            padding: 24px;
+        }
+        .trust-bar-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: center; align-items: center;
+            gap: 48px; flex-wrap: wrap;
+        }
+        .trust-item {
+            display: flex; align-items: center; gap: 10px;
+            color: var(--gray-700); font-weight: 500; font-size: 0.95rem;
+        }
+        .trust-item svg { width: 20px; height: 20px; color: var(--success); }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 100px 24px; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-label {
+            text-transform: uppercase; letter-spacing: 3px;
+            color: var(--primary); font-weight: 600; font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800; color: var(--dark);
+            margin-bottom: 16px; line-height: 1.2;
+        }
+        .section-subtitle {
+            color: var(--gray-500); font-size: 1.1rem; max-width: 600px;
+            margin-bottom: 48px;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-it-works { background: var(--gray-100); }
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .step {
+            text-align: center; padding: 40px 28px;
+            background: white; border-radius: 16px;
+            box-shadow: var(--shadow); position: relative;
+        }
+        .step-number {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--primary); color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .step h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark); }
+        .step p { color: var(--gray-500); font-size: 0.95rem; }
+
+        /* ===== SERVICES ===== */
+        .services-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+        }
+        .service-card {
+            padding: 32px; border-radius: 16px;
+            border: 1px solid var(--gray-300);
+            transition: all 0.3s; background: white;
+        }
+        .service-card:hover {
+            border-color: var(--primary); box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+        .service-icon {
+            width: 52px; height: 52px; border-radius: 12px;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; margin-bottom: 16px;
+        }
+        .service-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--dark); }
+        .service-card p { color: var(--gray-500); font-size: 0.9rem; line-height: 1.6; }
+
+        /* ===== ABOUT ===== */
+        .about { background: var(--gray-100); }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .about-image {
+            background: linear-gradient(135deg, var(--primary), #1e3a5f);
+            border-radius: 20px; padding: 48px; color: white;
+            position: relative; overflow: hidden;
+        }
+        .about-image::before {
+            content: '🔧'; position: absolute; right: -20px; bottom: -20px;
+            font-size: 180px; opacity: 0.1;
+        }
+        .about-image h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem; margin-bottom: 16px;
+        }
+        .about-image p { opacity: 0.9; line-height: 1.8; }
+        .about-features { display: flex; flex-direction: column; gap: 24px; }
+        .about-feature {
+            display: flex; gap: 16px; align-items: flex-start;
+        }
+        .about-feature-icon {
+            width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .about-feature h4 { font-size: 1rem; margin-bottom: 4px; }
+        .about-feature p { color: var(--gray-500); font-size: 0.9rem; }
+
+        /* ===== REVIEWS ===== */
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .review-card {
+            padding: 32px; border-radius: 16px;
+            background: white; border: 1px solid var(--gray-300);
+            transition: all 0.3s;
+        }
+        .review-card:hover { box-shadow: var(--shadow-lg); }
+        .review-stars { color: var(--accent); font-size: 1.1rem; margin-bottom: 16px; letter-spacing: 2px; }
+        .review-text {
+            color: var(--gray-700); font-size: 0.95rem; line-height: 1.7;
+            margin-bottom: 20px; font-style: italic;
+        }
+        .review-author {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .review-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem;
+        }
+        .review-name { font-weight: 600; font-size: 0.9rem; }
+        .review-date { color: var(--gray-500); font-size: 0.8rem; }
+        .review-source { color: var(--gray-500); font-size: 0.75rem; margin-top: 2px; }
+
+        /* ===== CTA BANNER ===== */
+        .cta-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1a56db 100%);
+            padding: 80px 24px; text-align: center;
+        }
+        .cta-banner h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; font-weight: 800; color: white;
+            margin-bottom: 16px;
+        }
+        .cta-banner p {
+            color: rgba(255,255,255,0.8); font-size: 1.15rem;
+            margin-bottom: 36px; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+        .cta-banner .btn-primary { font-size: 1.15rem; padding: 18px 40px; }
+        .cta-phone {
+            color: white; font-size: 1.8rem; font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            text-decoration: none; display: block; margin-top: 20px;
+        }
+        .cta-phone:hover { color: var(--accent); }
+
+        /* ===== CONTACT ===== */
+        .contact { background: var(--gray-100); }
+        .contact-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+        }
+        .contact-info-card {
+            display: flex; gap: 16px; align-items: flex-start;
+            padding: 24px; background: white; border-radius: 12px;
+            border: 1px solid var(--gray-300); margin-bottom: 16px;
+        }
+        .contact-info-icon {
+            width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+        }
+        .contact-info-card h4 { font-size: 0.95rem; margin-bottom: 4px; }
+        .contact-info-card p { color: var(--gray-500); font-size: 0.9rem; }
+        .contact-info-card a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        
+        .contact-form {
+            background: white; padding: 36px; border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+        .contact-form h3 { font-size: 1.3rem; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block; font-weight: 500; font-size: 0.9rem;
+            margin-bottom: 6px; color: var(--gray-700);
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px 16px; border: 1px solid var(--gray-300);
+            border-radius: 8px; font-family: inherit; font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-submit {
+            width: 100%; background: var(--primary); color: white;
+            padding: 14px; border-radius: 10px; border: none;
+            font-weight: 600; font-size: 1rem; cursor: pointer;
+            font-family: inherit; transition: all 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-dark); }
+
+        /* Map */
+        .map-container {
+            border-radius: 16px; overflow: hidden;
+            box-shadow: var(--shadow); margin-top: 48px;
+            height: 350px;
+        }
+        .map-container iframe { width: 100%; height: 100%; border: 0; }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark); color: rgba(255,255,255,0.7);
+            padding: 60px 24px 30px;
+        }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+        }
+        .footer-brand .logo { color: white; margin-bottom: 16px; }
+        .footer-brand p { font-size: 0.9rem; line-height: 1.7; max-width: 320px; }
+        footer h4 {
+            color: white; font-size: 0.95rem; margin-bottom: 16px;
+        }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a {
+            color: rgba(255,255,255,0.6); text-decoration: none;
+            font-size: 0.9rem; transition: color 0.2s;
+        }
+        .footer-links a:hover { color: white; }
+        .footer-bottom {
+            max-width: 1200px; margin: 40px auto 0;
+            padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.85rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-stats { grid-template-columns: repeat(4, 1fr); }
+            .hero h1 { font-size: 2.8rem; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: block; }
+            .hero { padding: 120px 24px 60px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .hero-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .stat-card { padding: 20px; }
+            .stat-card .number { font-size: 1.8rem; }
+            .steps { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .about-grid { grid-template-columns: 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            section { padding: 60px 24px; }
+            .section-title { font-size: 2rem; }
+            .cta-banner h2 { font-size: 1.8rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .trust-bar-inner { gap: 24px; }
+            .hero-buttons { flex-direction: column; }
+            .btn { justify-content: center; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">M</div>
+                Mobile Auto Tech
+            </a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="tel:8653375911" class="nav-cta">📞 (865) 337-5911</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#how-it-works" onclick="closeMenu()">How It Works</a>
+            <a href="#services" onclick="closeMenu()">Services</a>
+            <a href="#about" onclick="closeMenu()">About</a>
+            <a href="#reviews" onclick="closeMenu()">Reviews</a>
+            <a href="#contact" onclick="closeMenu()">Contact</a>
+            <a href="tel:8653375911" style="color: var(--primary); font-weight: 700;">📞 Call (865) 337-5911</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <div class="hero-badge">
+                    <span class="stars">★★★★★</span>
+                    <span>4.8 Stars · 610+ Reviews</span>
+                </div>
+                <h1>Knoxville's #1 <span>Mobile Mechanic</span></h1>
+                <p>Expert auto repair at your home or workplace. No towing, no waiting rooms. David and the team come to YOU with a fully-equipped service truck.</p>
+                <div class="hero-buttons">
+                    <a href="tel:8653375911" class="btn btn-primary">📞 Call Now — (865) 337-5911</a>
+                    <a href="#contact" class="btn btn-outline">Get a Free Quote</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card highlight">
+                    <div class="number">610+</div>
+                    <div class="label">5-Star Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">4.8</div>
+                    <div class="label">Average Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">24/7</div>
+                    <div class="label">Emergency Service</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Towing Needed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+        <div class="trust-bar-inner">
+            <div class="trust-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                ASE Certified Technicians
+            </div>
+            <div class="trust-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                All Makes & Models
+            </div>
+            <div class="trust-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Same-Day Service Available
+            </div>
+            <div class="trust-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Fair & Transparent Pricing
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-inner">
+            <div style="text-align: center;">
+                <div class="section-label">How It Works</div>
+                <h2 class="section-title">Getting Your Car Fixed Has Never Been Easier</h2>
+                <p class="section-subtitle" style="margin-left: auto; margin-right: auto;">Skip the dealership. Skip the waiting room. We bring the shop to you.</p>
+            </div>
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Call or Text</h3>
+                    <p>Tell us what's going on with your vehicle. We'll give you an honest quote right over the phone.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>We Come to You</h3>
+                    <p>David arrives at your home or workplace in a fully-equipped service truck. No tow truck needed.</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Drive Away Happy</h3>
+                    <p>Your car is fixed on the spot. Fair prices, quality work, and you never left your driveway.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="section-inner">
+            <div class="section-label">Our Services</div>
+            <h2 class="section-title">Complete Auto Repair, Right at Your Door</h2>
+            <p class="section-subtitle">From routine maintenance to complex repairs, we handle it all — at your location.</p>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🛢️</div>
+                    <h3>Oil Changes</h3>
+                    <p>Full synthetic, conventional, or high-mileage oil changes with filter replacement. Quick and convenient at your location.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔧</div>
+                    <h3>Brake Repair</h3>
+                    <p>Brake pad replacement, rotor resurfacing, brake fluid flush, and complete brake system diagnostics.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">❄️</div>
+                    <h3>A/C Service</h3>
+                    <p>Air conditioning recharge, leak repair, compressor replacement, and full system diagnostics.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔋</div>
+                    <h3>Electrical & Starters</h3>
+                    <p>Alternator replacement, starter repair, battery service, and complete electrical system diagnostics.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Engine Diagnostics</h3>
+                    <p>Check engine light diagnosis, computer scanning, engine repair, timing belts, water pumps, and more.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🚗</div>
+                    <h3>General Maintenance</h3>
+                    <p>Tune-ups, fluid checks, belt replacement, hose repair, and preventative maintenance to keep you on the road.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="section-inner">
+            <div class="about-grid">
+                <div class="about-image fade-in">
+                    <h3>Master Mechanic. Mobile Service. Your Convenience.</h3>
+                    <p>Mobile Auto Tech Service Center is owned and operated by David, a master technician serving the greater Knoxville area. With a fully-equipped mobile service truck, David brings the repair shop directly to your driveway, office parking lot, or wherever your vehicle is.</p>
+                    <br>
+                    <p>With over 610 five-star reviews, Mobile Auto Tech has become one of the most trusted names in Knoxville auto repair — all through word of mouth and exceptional service.</p>
+                </div>
+                <div class="about-features fade-in">
+                    <div class="section-label">Why Choose Us</div>
+                    <h2 class="section-title">The Mechanic Knoxville Trusts</h2>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">🏠</div>
+                        <div>
+                            <h4>We Come to You</h4>
+                            <p>No towing costs. No waiting rooms. Repairs done right at your home or workplace.</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">💰</div>
+                        <div>
+                            <h4>Honest, Fair Pricing</h4>
+                            <p>Upfront quotes with no hidden fees. We'll explain everything before we start.</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">⚡</div>
+                        <div>
+                            <h4>Fast Turnaround</h4>
+                            <p>Most repairs completed same-day. Many jobs done in under an hour on-site.</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">🔧</div>
+                        <div>
+                            <h4>All Makes & Models</h4>
+                            <p>Cars, trucks, SUVs — domestic and import. David's seen it all and fixed it all.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="reviews">
+        <div class="section-inner">
+            <div style="text-align: center;">
+                <div class="section-label">Customer Reviews</div>
+                <h2 class="section-title">610+ Five-Star Reviews Can't Be Wrong</h2>
+                <p class="section-subtitle" style="margin-left: auto; margin-right: auto;">Don't take our word for it. Here's what Knoxville drivers are saying.</p>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">G</div>
+                        <div>
+                            <div class="review-name">Google Reviewer</div>
+                            <div class="review-source">Google Review · January 2026</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">S</div>
+                        <div>
+                            <div class="review-name">Satisfied Customer</div>
+                            <div class="review-source">Google Review · 2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">K</div>
+                        <div>
+                            <div class="review-name">Knox County Driver</div>
+                            <div class="review-source">Google Review · 2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">R</div>
+                        <div>
+                            <div class="review-name">Repeat Customer</div>
+                            <div class="review-source">Google Review · 2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">T</div>
+                        <div>
+                            <div class="review-name">Knoxville Resident</div>
+                            <div class="review-source">Google Review · December 2025</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card fade-in">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
+                    <div class="review-author">
+                        <div class="review-avatar">M</div>
+                        <div>
+                            <div class="review-name">Maryville Driver</div>
+                            <div class="review-source">Google Review · December 2025</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <div class="cta-banner">
+        <h2>Car Trouble? We'll Be Right There.</h2>
+        <p>Skip the dealership. Skip the tow truck. Get your car fixed today — right where it sits.</p>
+        <a href="tel:8653375911" class="btn btn-primary">📞 Call David Now</a>
+        <a href="tel:8653375911" class="cta-phone">(865) 337-5911</a>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="section-inner">
+            <div class="contact-grid">
+                <div>
+                    <div class="section-label">Get In Touch</div>
+                    <h2 class="section-title">Ready to Get Your Car Fixed?</h2>
+                    <p class="section-subtitle">Call, text, or fill out the form. We'll get back to you fast.</p>
+                    
+                    <div class="contact-info-card">
+                        <div class="contact-info-icon">📞</div>
+                        <div>
+                            <h4>Call or Text</h4>
+                            <p><a href="tel:8653375911">(865) 337-5911</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="contact-info-icon">📍</div>
+                        <div>
+                            <h4>Service Area</h4>
+                            <p>Knoxville, TN & Surrounding Areas<br>Knox, Blount & Anderson Counties</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="contact-info-icon">🕐</div>
+                        <div>
+                            <h4>Business Hours</h4>
+                            <p>Monday – Saturday: 9:00 AM – 7:00 PM<br>Sunday: Closed<br><strong>24/7 Emergency Roadside Available</strong></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="contact-info-icon">📧</div>
+                        <div>
+                            <h4>Shop Location</h4>
+                            <p>8403 Kingston Pike, Ste C<br>Knoxville, TN 37919</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <form class="contact-form" action="https://formspree.io/f/xpwzgkqr" method="POST">
+                        <h3>Request a Free Quote</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required placeholder="John Smith">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="(865) 555-1234">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="john@email.com">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vehicle">Vehicle (Year, Make, Model)</label>
+                                <input type="text" id="vehicle" name="vehicle" placeholder="2019 Honda Civic">
+                            </div>
+                            <div class="form-group">
+                                <label for="service">Service Needed</label>
+                                <select id="service" name="service">
+                                    <option value="">Select a service...</option>
+                                    <option value="oil-change">Oil Change</option>
+                                    <option value="brakes">Brake Repair</option>
+                                    <option value="ac">A/C Service</option>
+                                    <option value="electrical">Electrical / Starter / Alternator</option>
+                                    <option value="engine">Engine Diagnostics</option>
+                                    <option value="maintenance">General Maintenance</option>
+                                    <option value="emergency">Emergency / Roadside</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Describe the Problem</label>
+                            <textarea id="message" name="message" placeholder="Tell us what's going on with your vehicle..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Get My Free Quote →</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MAP -->
+            <div class="map-container fade-in">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.0!2d-84.028!3d35.934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDU2JzAyLjQiTiA4NMKwMDEnNDAuOCJX!5e0!3m2!1sen!2sus!4v1600000000000" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mobile Auto Tech Service location"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-icon">M</div>
+                    Mobile Auto Tech
+                </a>
+                <p>Knoxville's most trusted mobile mechanic service. We bring expert auto repair directly to your home or workplace. 610+ five-star reviews.</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:8653375911">(865) 337-5911</a></li>
+                    <li><a href="#">8403 Kingston Pike, Ste C</a></li>
+                    <li><a href="#">Knoxville, TN 37919</a></li>
+                    <li><a href="#">Mon–Sat: 9AM–7PM</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Mobile Auto Tech Service Center. All rights reserved.</span>
+            <span>Serving Knoxville, Maryville, Oak Ridge & Surrounding Areas</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        }
+
+        // Nav scroll effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
