@@ -54,18 +54,37 @@
             --border-accent:rgba(0,163,255,0.2);
         }
         html{scroll-behavior:smooth}
-        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;cursor:none}
 
         ::-webkit-scrollbar{width:8px}
         ::-webkit-scrollbar-track{background:#0a0a0a}
         ::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
 
-        /* THREE.JS CANVAS */
+        /* LOADING SCREEN */
+        #loader{position:fixed;inset:0;z-index:99999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+        #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        #loader svg{height:80px;width:80px;animation:loaderSpin 1.5s linear infinite}
+        #loader .loader-text{margin-top:24px;font-size:1.2rem;font-weight:800;letter-spacing:4px;color:var(--accent);opacity:0;animation:loaderTextIn .6s .3s forwards}
+        @keyframes loaderSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+        @keyframes loaderTextIn{to{opacity:1}}
+
+        /* CUSTOM CURSOR */
+        .cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:100000;mix-blend-mode:screen;box-shadow:0 0 20px var(--accent),0 0 60px var(--accent-glow);transition:transform .1s;transform:translate(-50%,-50%)}
+        .cursor-trail{position:fixed;width:32px;height:32px;border:1px solid rgba(0,163,255,0.3);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:all .15s ease-out}
+        .cursor-dot.hovering{transform:translate(-50%,-50%) scale(2.5)}
+        .cursor-trail.hovering{width:50px;height:50px;border-color:var(--accent)}
+
+        /* FILM GRAIN OVERLAY */
+        .film-grain{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.035}
+        .film-grain::before{content:'';position:absolute;inset:-50%;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 0.5s steps(4) infinite}
+        @keyframes grain{0%,100%{transform:translate(0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-5%,-5%)}}
+
+        /* THREE.JS CANVASES */
         #three-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
         #hero-three{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
 
         /* NAV */
-        .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,0.4);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .4s cubic-bezier(.4,0,.2,1)}
         .nav.scrolled{background:rgba(0,0,0,0.95);border-bottom-color:var(--border-accent)}
         .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px}
         .logo{font-weight:800;font-size:1.25rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:-0.5px}
@@ -74,11 +93,14 @@
         .logo-text-top{font-size:.65rem;font-weight:600;letter-spacing:3px;color:var(--accent);text-transform:uppercase}
         .logo-text-bottom{font-size:1.1rem;font-weight:900;letter-spacing:-0.5px}
         .nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-        .nav-links a{text-decoration:none;color:var(--text-dim);font-weight:500;font-size:.9rem;transition:color .2s;letter-spacing:0.2px}
+        .nav-links a{text-decoration:none;color:var(--text-dim);font-weight:500;font-size:.9rem;transition:color .3s;letter-spacing:0.2px;position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width .3s;box-shadow:0 0 8px var(--accent-glow)}
+        .nav-links a:hover::after,.nav-links a.active::after{width:100%}
         .nav-links a:hover{color:var(--text)}
-        .nav-cta{background:var(--accent)!important;color:#000!important;padding:10px 22px;border-radius:8px;font-weight:700!important;transition:all .3s!important;box-shadow:0 0 20px var(--accent-glow)}
+        .nav-cta{background:var(--accent)!important;color:#000!important;padding:10px 22px;border-radius:8px;font-weight:700!important;transition:all .3s!important;box-shadow:0 0 20px var(--accent-glow);position:relative;overflow:hidden}
+        .nav-cta::after{display:none!important}
         .nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 30px var(--accent-glow)}
-        .hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px}
+        .hamburger{display:none;background:none;border:none;cursor:none;padding:4px}
         .hamburger span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;transition:all .3s}
         .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
         .hamburger.active span:nth-child(2){opacity:0}
@@ -89,30 +111,50 @@
 
         /* HERO */
         .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 24px 80px}
-        .hero-bg-img{position:absolute;inset:0;background:url('images/real-van.webp') center/cover no-repeat;opacity:0.15;z-index:0}
-        .hero-bg-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,163,255,0.12) 0%,transparent 70%);z-index:1}
-        /* Scanline overlay */
-        .hero-scanlines{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);mix-blend-mode:multiply}
-        .hero-noise{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-        .hero-content{position:relative;z-index:3;max-width:800px}
-        .hero-label{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;border:1px solid var(--border-accent);background:rgba(0,163,255,0.05);color:var(--accent);font-size:.85rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:32px}
+        .hero-bg-layers{position:absolute;inset:0;z-index:0}
+        .hero-bg-layer1{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 30% 40%,rgba(0,30,60,0.8) 0%,transparent 60%);animation:bgShift1 12s ease-in-out infinite alternate}
+        .hero-bg-layer2{position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 70% 60%,rgba(0,60,120,0.3) 0%,transparent 50%);animation:bgShift2 15s ease-in-out infinite alternate}
+        .hero-bg-layer3{position:absolute;inset:0;background:radial-gradient(circle at 50% 80%,rgba(255,100,0,0.05) 0%,transparent 40%);animation:bgShift3 10s ease-in-out infinite alternate}
+        @keyframes bgShift1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(3%,-2%) scale(1.05)}}
+        @keyframes bgShift2{0%{transform:translate(0,0)}100%{transform:translate(-3%,2%)}}
+        @keyframes bgShift3{0%{opacity:.3}100%{opacity:.7}}
+        .hero-bg-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,163,255,0.08) 0%,transparent 70%);z-index:1}
+        .hero-scanlines{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px)}
+
+        /* SPARK PARTICLES CANVAS */
+        #spark-canvas{position:absolute;inset:0;z-index:2;pointer-events:none}
+
+        /* FOG LAYER */
+        .hero-fog{position:absolute;bottom:0;left:0;right:0;height:200px;z-index:3;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.3) 30%,transparent 100%)}
+        .hero-fog::before{content:'';position:absolute;bottom:0;left:-20%;width:140%;height:150px;background:radial-gradient(ellipse 80% 100% at 50% 100%,rgba(0,20,40,0.6),transparent);animation:fogDrift 20s ease-in-out infinite alternate}
+        .hero-fog::after{content:'';position:absolute;bottom:0;left:-10%;width:120%;height:100px;background:radial-gradient(ellipse 60% 100% at 60% 100%,rgba(0,40,80,0.3),transparent);animation:fogDrift2 15s ease-in-out infinite alternate}
+        @keyframes fogDrift{0%{transform:translateX(-5%)}100%{transform:translateX(5%)}}
+        @keyframes fogDrift2{0%{transform:translateX(5%)}100%{transform:translateX(-5%)}}
+
+        .hero-content{position:relative;z-index:4;max-width:800px}
+        .hero-label{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;border:1px solid var(--border-accent);background:rgba(0,163,255,0.05);color:var(--accent);font-size:.85rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:32px;backdrop-filter:blur(10px)}
         .hero-label svg{width:16px;height:16px}
         .hero h1{font-size:clamp(3rem,8vw,5.5rem);font-weight:900;line-height:1;letter-spacing:-3px;margin-bottom:24px;background:linear-gradient(180deg,#fff 40%,rgba(255,255,255,0.5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero h1 .char{display:inline-block;opacity:0;transform:translateY(40px) blur(10px);filter:blur(8px);animation:charReveal .5s forwards}
+        @keyframes charReveal{to{opacity:1;transform:translateY(0);filter:blur(0)}}
         .hero-sub{font-size:1.15rem;color:var(--text-dim);max-width:560px;margin:0 auto 48px;line-height:1.7;font-weight:400}
         .hero-stats-line{display:flex;justify-content:center;gap:32px;margin-bottom:48px;flex-wrap:wrap}
         .hero-stat{display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:.95rem;font-weight:500}
         .hero-stat svg{width:18px;height:18px;color:var(--accent)}
         .hero-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-        .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .3s;border:none;cursor:pointer;letter-spacing:-0.2px}
+        .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);border:none;cursor:none;letter-spacing:-0.2px;position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity .3s}
+        .btn:hover::before{opacity:1}
         .btn-primary{background:var(--accent);color:#000;box-shadow:0 0 30px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,0.2)}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,0.2)}
-        .btn-secondary{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border)}
-        .btn-secondary:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)}
+        .btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 0 50px var(--accent-glow),0 8px 25px rgba(0,163,255,0.3),inset 0 1px 0 rgba(255,255,255,0.2)}
+        .btn-secondary{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border);backdrop-filter:blur(10px)}
+        .btn-secondary:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);transform:translateY(-3px) scale(1.02)}
         .btn svg{width:20px;height:20px}
 
-        /* SVG ICON GLOW */
-        .service-icon-svg{width:52px;height:52px;border-radius:12px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-        .service-icon-svg svg{width:28px;height:28px;color:var(--accent);filter:drop-shadow(0 0 8px var(--accent-glow))}
+        /* SCROLL INDICATOR */
+        .scroll-indicator{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-muted);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;animation:scrollBounce 2s ease-in-out infinite}
+        .scroll-indicator svg{width:24px;height:24px;color:var(--accent)}
+        @keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
 
         /* SERVICES */
         section{padding:120px 24px;position:relative;z-index:2}
@@ -125,15 +167,21 @@
         .center .section-subtitle{margin-left:auto;margin-right:auto}
         .center .section-label{justify-content:center}
 
+        /* TEXT WIPE REVEAL */
+        .wipe-reveal{position:relative;overflow:hidden;display:inline-block}
+        .wipe-reveal::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:var(--accent);transform:scaleX(1);transform-origin:right;transition:transform .8s cubic-bezier(.77,0,.175,1)}
+        .wipe-reveal.revealed::after{transform:scaleX(0)}
+
         .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-        .service-card{padding:0;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .4s;position:relative;overflow:hidden;opacity:0;transform:translateY(40px)}
-        .service-card.visible{opacity:1;transform:translateY(0)}
-        .service-card-img{width:100%;height:180px;object-fit:cover;display:block;opacity:0.7;transition:opacity .4s}
-        .service-card:hover .service-card-img{opacity:1}
-        .service-card-body{padding:28px}
-        .service-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,transparent,var(--accent),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;z-index:2;pointer-events:none}
+        .service-card{padding:0;border-radius:16px;background:rgba(13,13,13,0.6);backdrop-filter:blur(20px);border:1px solid var(--border);transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;transform-style:preserve-3d;perspective:800px}
+        /* Gradient border animation */
+        .service-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,var(--accent),#00e5ff,var(--accent));background-size:200% 200%;animation:gradientBorder 4s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;z-index:2;pointer-events:none}
+        @keyframes gradientBorder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
         .service-card:hover::before{opacity:1}
-        .service-card:hover{transform:translateY(-4px)!important;box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--accent-dim)}
+        .service-card:hover{box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px var(--accent-dim)}
+        .service-card-img{width:100%;height:180px;object-fit:cover;display:block;opacity:0.7;transition:opacity .4s,transform .6s}
+        .service-card:hover .service-card-img{opacity:1;transform:scale(1.05)}
+        .service-card-body{padding:28px;position:relative;z-index:1}
         .service-card h3{font-size:1.15rem;font-weight:700;margin-bottom:10px;letter-spacing:-0.3px;display:flex;align-items:center;gap:10px}
         .service-card h3 svg{width:20px;height:20px;color:var(--accent);flex-shrink:0}
         .service-card p{color:var(--text-dim);font-size:.9rem;line-height:1.7}
@@ -143,9 +191,9 @@
         .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative}
         .steps::before{content:'';position:absolute;top:40px;left:calc(16.67% + 28px);right:calc(16.67% + 28px);height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-glow),var(--accent));opacity:.3}
         .step{text-align:center;position:relative;z-index:1}
-        .step-num{width:80px;height:80px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:var(--accent);margin:0 auto 24px;box-shadow:0 0 30px var(--accent-dim);transition:all .3s}
+        .step-num{width:80px;height:80px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:var(--accent);margin:0 auto 24px;box-shadow:0 0 30px var(--accent-dim);transition:all .4s cubic-bezier(.4,0,.2,1)}
         .step-num svg{width:36px;height:36px}
-        .step:hover .step-num{background:var(--accent);color:#000;box-shadow:0 0 40px var(--accent-glow)}
+        .step:hover .step-num{background:var(--accent);color:#000;box-shadow:0 0 40px var(--accent-glow);transform:scale(1.1)}
         .step:hover .step-num svg{color:#000}
         .step h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
         .step p{color:var(--text-dim);font-size:.9rem;max-width:280px;margin:0 auto}
@@ -163,9 +211,11 @@
         .about-feature h4{font-size:1rem;font-weight:700;margin-bottom:4px}
         .about-feature p{color:var(--text-dim);font-size:.9rem}
 
-        /* GALLERY */
-        .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-        .gallery-item{position:relative;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;border:1px solid var(--border);transition:all .4s}
+        /* GALLERY - HORIZONTAL SCROLL */
+        .gallery-section{background:var(--bg-card);overflow:hidden}
+        .gallery-horizontal-wrapper{overflow:hidden}
+        .gallery-horizontal{display:flex;gap:16px;width:max-content}
+        .gallery-item{position:relative;border-radius:12px;overflow:hidden;cursor:none;width:350px;height:260px;flex-shrink:0;border:1px solid var(--border);transition:all .4s}
         .gallery-item:hover{border-color:var(--accent);box-shadow:0 0 25px var(--accent-dim);transform:scale(1.03)}
         .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
         .gallery-item:hover img{transform:scale(1.1)}
@@ -173,58 +223,63 @@
         .gallery-item:hover::after{opacity:1}
 
         /* LIGHTBOX */
-        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:pointer}
+        .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:none}
         .lightbox.active{display:flex}
         .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 0 60px rgba(0,163,255,0.2)}
-        .lightbox-close{position:absolute;top:24px;right:32px;color:#fff;font-size:2.5rem;cursor:pointer;z-index:10001;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1);transition:background .3s}
+        .lightbox-close{position:absolute;top:24px;right:32px;color:#fff;font-size:2.5rem;cursor:none;z-index:10001;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1);transition:background .3s}
         .lightbox-close:hover{background:rgba(255,255,255,0.2)}
 
-        /* REVIEWS */
-        .reviews-scroll-container{position:relative;overflow:hidden}
-        .reviews-track{display:flex;gap:20px;animation:reviewScroll 30s linear infinite;width:max-content}
-        .reviews-track:hover{animation-play-state:paused}
-        .review-card{padding:32px;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .3s;min-width:380px;max-width:380px;flex-shrink:0}
-        .review-card:hover{border-color:var(--border-accent);box-shadow:0 0 20px var(--accent-dim)}
-        .review-stars{color:#FFB800;font-size:1rem;margin-bottom:16px;letter-spacing:2px}
+        /* REVIEWS — 3D CARD STACK */
+        .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;perspective:1200px}
+        .review-card{padding:36px;border-radius:16px;background:rgba(13,13,13,0.7);backdrop-filter:blur(20px);border:1px solid var(--border);transition:all .4s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;position:relative;overflow:hidden}
+        .review-card:hover{border-color:var(--border-accent);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--accent-dim)}
+        .review-card .quote-mark{position:absolute;top:16px;right:20px;font-size:5rem;color:var(--accent);opacity:.08;font-family:Georgia,serif;line-height:1;filter:drop-shadow(0 0 20px var(--accent));pointer-events:none}
+        .review-stars{color:#FFB800;font-size:1.1rem;margin-bottom:16px;letter-spacing:3px}
+        .review-stars .star{display:inline-block;opacity:0;transform:scale(0) rotate(-180deg);animation:starPop .4s forwards}
+        @keyframes starPop{to{opacity:1;transform:scale(1) rotate(0deg)}}
         .review-text{color:var(--text-dim);font-size:.9rem;line-height:1.8;margin-bottom:24px;font-style:italic}
         .review-author{display:flex;align-items:center;gap:12px}
         .review-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#0066CC);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
         .review-name{font-weight:600;font-size:.9rem}
         .review-source{color:var(--text-muted);font-size:.75rem;margin-top:2px}
-        @keyframes reviewScroll{
-            0%{transform:translateX(0)}
-            100%{transform:translateX(-50%)}
-        }
 
-        /* STATS */
+        /* STATS — PINNED */
         .stats-section{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
         .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
-        .stat-item .stat-number{font-size:clamp(2.5rem,4vw,3.5rem);font-weight:900;color:var(--accent);letter-spacing:-2px;line-height:1}
+        .stat-item .stat-number{font-size:clamp(2.5rem,4vw,3.5rem);font-weight:900;color:var(--accent);letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums}
         .stat-item .stat-label{color:var(--text-dim);font-size:.9rem;margin-top:8px;font-weight:500}
 
         /* CONTACT */
         .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
-        .contact-info-card{display:flex;gap:16px;align-items:flex-start;padding:20px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);margin-bottom:14px;transition:border-color .3s}
-        .contact-info-card:hover{border-color:var(--border-accent)}
+        .contact-info-card{display:flex;gap:16px;align-items:flex-start;padding:20px;border-radius:12px;background:rgba(13,13,13,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);margin-bottom:14px;transition:all .3s}
+        .contact-info-card:hover{border-color:var(--border-accent);transform:translateX(4px)}
         .contact-info-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center}
         .contact-info-icon svg{width:22px;height:22px;filter:drop-shadow(0 0 6px var(--accent-glow))}
         .contact-info-card h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
         .contact-info-card p{color:var(--text-dim);font-size:.85rem;line-height:1.6}
-        .contact-info-card a{color:var(--accent);text-decoration:none;font-weight:600}
-        .contact-form{background:var(--bg-card);padding:40px;border-radius:16px;border:1px solid var(--border)}
+        .contact-info-card a{color:var(--accent);text-decoration:none;font-weight:600;transition:text-shadow .3s}
+        .contact-info-card a:hover{text-shadow:0 0 15px var(--accent-glow)}
+        /* PHONE PULSE */
+        .phone-link{animation:phonePulse 2s ease-in-out infinite}
+        @keyframes phonePulse{0%,100%{text-shadow:0 0 5px transparent}50%{text-shadow:0 0 15px var(--accent-glow)}}
+
+        .contact-form{background:rgba(13,13,13,0.6);backdrop-filter:blur(20px);padding:40px;border-radius:16px;border:1px solid var(--border)}
         .contact-form h3{font-size:1.3rem;font-weight:700;margin-bottom:28px}
-        .form-group{margin-bottom:16px}
+        .form-group{margin-bottom:16px;position:relative}
         .form-group label{display:block;font-weight:500;font-size:.85rem;margin-bottom:6px;color:var(--text-dim)}
-        .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.9rem;background:var(--bg);color:var(--text);transition:border-color .2s}
-        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+        .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 0;border:none;border-bottom:2px solid var(--border);border-radius:0;font-family:inherit;font-size:.9rem;background:transparent;color:var(--text);transition:border-color .3s;outline:none}
+        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-bottom-color:var(--accent);box-shadow:0 1px 0 0 var(--accent)}
+        /* Glowing underline from center */
+        .form-group .input-line{position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--accent);transition:all .4s cubic-bezier(.4,0,.2,1);transform:translateX(-50%);box-shadow:0 0 10px var(--accent-glow)}
+        .form-group input:focus~.input-line,.form-group textarea:focus~.input-line,.form-group select:focus~.input-line{width:100%}
         .form-group textarea{resize:vertical;min-height:100px}
         .form-group select option{background:var(--bg-card);color:var(--text)}
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-        .btn-submit{width:100%;background:var(--accent);color:#000;padding:14px;border-radius:10px;border:none;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;transition:all .3s;box-shadow:0 0 20px var(--accent-glow)}
-        .btn-submit:hover{box-shadow:0 0 40px var(--accent-glow);transform:translateY(-1px)}
+        .btn-submit{width:100%;background:var(--accent);color:#000;padding:14px;border-radius:10px;border:none;font-weight:700;font-size:1rem;cursor:none;font-family:inherit;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:0 0 20px var(--accent-glow);position:relative;overflow:hidden}
+        .btn-submit:hover{box-shadow:0 0 50px var(--accent-glow);transform:translateY(-2px) scale(1.01)}
 
         .map-container{border-radius:16px;overflow:hidden;margin-top:64px;height:350px;border:1px solid var(--border)}
-        .map-container iframe{width:100%;height:100%;border:0;filter:invert(90%) hue-rotate(180deg)}
+        .map-container iframe{width:100%;height:100%;border:0;filter:invert(90%) hue-rotate(180deg) saturate(0.3) brightness(0.8)}
 
         /* CTA BANNER */
         .cta-banner{padding:120px 24px;text-align:center;position:relative;overflow:hidden;z-index:2}
@@ -234,6 +289,20 @@
         .cta-banner p{color:var(--text-dim);font-size:1.1rem;margin-bottom:40px;max-width:550px;margin-left:auto;margin-right:auto}
         .cta-phone{color:var(--accent);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;text-decoration:none;display:block;margin-top:24px;letter-spacing:-1px;transition:text-shadow .3s}
         .cta-phone:hover{text-shadow:0 0 30px var(--accent-glow)}
+
+        /* FLOATING CALL BUTTON */
+        .floating-call{position:fixed;bottom:32px;right:32px;z-index:9000;width:60px;height:60px;border-radius:50%;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 0 30px var(--accent-glow);transition:all .3s;cursor:none;opacity:0;transform:scale(0.5);animation:none}
+        .floating-call.visible{opacity:1;transform:scale(1)}
+        .floating-call svg{width:28px;height:28px}
+        .floating-call::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--accent);animation:callPulse 2s ease-in-out infinite;opacity:0}
+        @keyframes callPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+        .floating-call:hover{transform:scale(1.1);box-shadow:0 0 50px var(--accent-glow)}
+
+        /* BACK TO TOP */
+        .back-to-top{position:fixed;bottom:104px;right:36px;z-index:9000;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);border:1px solid var(--border);color:var(--text);display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:none;opacity:0;transform:translateY(20px);transition:all .3s}
+        .back-to-top.visible{opacity:1;transform:translateY(0)}
+        .back-to-top:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+        .back-to-top svg{width:20px;height:20px}
 
         /* FOOTER */
         footer{background:var(--bg-card);border-top:1px solid var(--border);padding:60px 24px 30px;position:relative;z-index:2}
@@ -247,18 +316,16 @@
         .footer-links a:hover{color:var(--accent)}
         .footer-bottom{max-width:1200px;margin:40px auto 0;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--text-muted)}
 
-        /* ANIMATIONS */
-        .fade-up{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
-        .fade-up.visible{opacity:1;transform:translateY(0)}
-
         /* RESPONSIVE */
         @media(max-width:1024px){
             .services-grid{grid-template-columns:repeat(2,1fr)}
             .about-grid{grid-template-columns:1fr;gap:48px}
             .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px}
-            .gallery-grid{grid-template-columns:repeat(2,1fr)}
+            .reviews-grid{grid-template-columns:1fr 1fr}
         }
         @media(max-width:768px){
+            body{cursor:auto}
+            .cursor-dot,.cursor-trail{display:none!important}
             section{padding:80px 24px}
             .nav-links{display:none}
             .hamburger{display:block}
@@ -271,12 +338,38 @@
             .hero-stats-line{gap:16px}
             .stats-grid{grid-template-columns:1fr 1fr}
             .hero-buttons{flex-direction:column;align-items:center}
-            .gallery-grid{grid-template-columns:1fr 1fr}
-            .review-card{min-width:300px;max-width:300px}
+            .reviews-grid{grid-template-columns:1fr}
+            .gallery-item{width:280px;height:200px}
         }
     </style>
 </head>
 <body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="loader-grad" x1="0" y1="0" x2="44" y2="44"><stop offset="0%" stop-color="#00A3FF"/><stop offset="100%" stop-color="#0066CC"/></linearGradient></defs>
+        <circle cx="22" cy="22" r="14" stroke="url(#loader-grad)" stroke-width="2.5" fill="none"/>
+        <circle cx="22" cy="22" r="8" stroke="url(#loader-grad)" stroke-width="2" fill="none"/>
+        <circle cx="22" cy="22" r="3" fill="url(#loader-grad)"/>
+        <rect x="20" y="1" width="4" height="7" rx="1" fill="url(#loader-grad)"/>
+        <rect x="20" y="36" width="4" height="7" rx="1" fill="url(#loader-grad)"/>
+        <rect x="1" y="20" width="7" height="4" rx="1" fill="url(#loader-grad)"/>
+        <rect x="36" y="20" width="7" height="4" rx="1" fill="url(#loader-grad)"/>
+        <rect x="8.2" y="5.8" width="4" height="7" rx="1" fill="url(#loader-grad)" transform="rotate(45 10.2 9.3)"/>
+        <rect x="31.8" y="31.2" width="4" height="7" rx="1" fill="url(#loader-grad)" transform="rotate(45 33.8 34.7)"/>
+        <rect x="31.8" y="5.8" width="4" height="7" rx="1" fill="url(#loader-grad)" transform="rotate(-45 33.8 9.3)"/>
+        <rect x="8.2" y="31.2" width="4" height="7" rx="1" fill="url(#loader-grad)" transform="rotate(-45 10.2 34.7)"/>
+    </svg>
+    <div class="loader-text">MOBILE AUTO TECH</div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-trail" id="cursor-trail"></div>
+
+<!-- FILM GRAIN -->
+<div class="film-grain"></div>
 
 <!-- THREE.JS BACKGROUND PARTICLES -->
 <canvas id="three-bg"></canvas>
@@ -285,7 +378,6 @@
 <nav class="nav" id="nav">
     <div class="nav-inner">
         <a href="#" class="logo">
-            <!-- SVG LOGO: Gear icon + wordmark -->
             <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px;width:38px">
                 <defs>
                     <linearGradient id="gear-grad" x1="0" y1="0" x2="44" y2="44">
@@ -293,15 +385,9 @@
                         <stop offset="100%" stop-color="#0066CC"/>
                     </linearGradient>
                 </defs>
-                <!-- Gear body -->
-                <path d="M22 6 L24.5 2 L19.5 2 Z M22 38 L24.5 42 L19.5 42 Z M6 22 L2 19.5 L2 24.5 Z M38 22 L42 24.5 L42 19.5 Z
-                    M10.34 10.34 L7.1 8.52 L8.52 7.1 Z M33.66 33.66 L36.9 35.48 L35.48 36.9 Z
-                    M10.34 33.66 L8.52 36.9 L7.1 35.48 Z M33.66 10.34 L35.48 7.1 L36.9 8.52 Z" fill="url(#gear-grad)" opacity="0"/>
-                <!-- Clean gear with proper teeth -->
                 <circle cx="22" cy="22" r="14" stroke="url(#gear-grad)" stroke-width="2.5" fill="none"/>
                 <circle cx="22" cy="22" r="8" stroke="url(#gear-grad)" stroke-width="2" fill="none"/>
                 <circle cx="22" cy="22" r="3" fill="url(#gear-grad)"/>
-                <!-- Gear teeth -->
                 <rect x="20" y="1" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
                 <rect x="20" y="36" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
                 <rect x="1" y="20" width="7" height="4" rx="1" fill="url(#gear-grad)"/>
@@ -310,7 +396,6 @@
                 <rect x="31.8" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(45 33.8 34.7)"/>
                 <rect x="31.8" y="5.8" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 33.8 9.3)"/>
                 <rect x="8.2" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 10.2 34.7)"/>
-                <!-- Wrench overlay integrated -->
                 <path d="M18 18 L12 12 M12 12 L10 14 L8 12 L12 8 L14 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
             </svg>
             <div class="logo-text">
@@ -319,11 +404,11 @@
             </div>
         </a>
         <ul class="nav-links">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#reviews">Reviews</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#services" data-section="services">Services</a></li>
+            <li><a href="#gallery" data-section="gallery">Gallery</a></li>
+            <li><a href="#about" data-section="about">About</a></li>
+            <li><a href="#reviews" data-section="reviews">Reviews</a></li>
+            <li><a href="#contact" data-section="contact">Contact</a></li>
             <li><a href="tel:8653375911" class="nav-cta">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 Call Now
@@ -344,18 +429,23 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-    <div class="hero-bg-img"></div>
+<section class="hero" id="hero">
+    <div class="hero-bg-layers">
+        <div class="hero-bg-layer1"></div>
+        <div class="hero-bg-layer2"></div>
+        <div class="hero-bg-layer3"></div>
+    </div>
     <div class="hero-bg-overlay"></div>
     <div class="hero-scanlines"></div>
-    <div class="hero-noise"></div>
+    <canvas id="spark-canvas"></canvas>
     <canvas id="hero-three"></canvas>
+    <div class="hero-fog"></div>
     <div class="hero-content">
         <div class="hero-label">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             Knoxville's #1 Mobile Mechanic
         </div>
-        <h1>We Come<br>To You</h1>
+        <h1 id="hero-title">We Come To You</h1>
         <div class="hero-stats-line">
             <div class="hero-stat">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -371,15 +461,19 @@
             </div>
         </div>
         <div class="hero-buttons">
-            <a href="tel:8653375911" class="btn btn-primary">
+            <a href="tel:8653375911" class="btn btn-primary magnetic">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 Call Now — (865) 337-5911
             </a>
-            <a href="#contact" class="btn btn-secondary">
+            <a href="#contact" class="btn btn-secondary magnetic">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 Get a Quote
             </a>
         </div>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
 </section>
 
@@ -390,7 +484,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             Services
         </div>
-        <h2 class="section-title">Complete Auto Repair,<br>Right at Your Door</h2>
+        <h2 class="section-title wipe-reveal">Complete Auto Repair,<br>Right at Your Door</h2>
         <p class="section-subtitle">From routine maintenance to complex repairs — all at your location.</p>
         <div class="services-grid">
             <div class="service-card" data-delay="0">
@@ -429,7 +523,7 @@
                 </div>
             </div>
             <div class="service-card" data-delay="5">
-                <img src="images/real-roadside.webp" alt="Roadside assistance" class="service-card-img" loading="lazy">
+                <img src="images/mechanic-working.jpg" alt="Roadside assistance" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
                     <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Roadside Assistance</h3>
                     <p>Stranded? We come to you with emergency roadside service. Jump starts, belt repairs, and on-the-spot diagnostics.</p>
@@ -443,20 +537,20 @@
 <section class="how-section" id="how-it-works">
     <div class="section-inner center">
         <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>How It Works</div>
-        <h2 class="section-title">Three Simple Steps</h2>
+        <h2 class="section-title wipe-reveal">Three Simple Steps</h2>
         <p class="section-subtitle">Skip the dealership. Skip the waiting room. We bring the shop to you.</p>
         <div class="steps">
-            <div class="step fade-up">
+            <div class="step">
                 <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
                 <h3>Call or Text Us</h3>
                 <p>Tell us what's going on with your vehicle. We'll give you an honest quote right over the phone.</p>
             </div>
-            <div class="step fade-up">
+            <div class="step">
                 <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
                 <h3>We Come to You</h3>
                 <p>David arrives at your home or workplace in a fully-equipped service truck. No tow truck needed.</p>
             </div>
-            <div class="step fade-up">
+            <div class="step">
                 <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                 <h3>Get Back on the Road</h3>
                 <p>Your car is fixed on the spot. Fair prices, quality work, and you never left your driveway.</p>
@@ -469,12 +563,12 @@
 <section id="about">
     <div class="section-inner">
         <div class="about-grid">
-            <div class="about-visual fade-up">
-                <img src="images/real-van.webp" alt="Mobile Auto Tech service van working on truck" loading="lazy">
+            <div class="about-visual">
+                <img src="images/mechanic-under-hood.jpg" alt="Mobile Auto Tech mechanic working under the hood" loading="lazy">
             </div>
-            <div class="fade-up">
+            <div>
                 <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>About Us</div>
-                <h2 class="section-title">The Mechanic<br>Knoxville Trusts</h2>
+                <h2 class="section-title wipe-reveal">The Mechanic<br>Knoxville Trusts</h2>
                 <p style="color:var(--text-dim);margin-bottom:36px;line-height:1.8;font-size:.95rem">Mobile Auto Tech Service Center is owned and operated by David, a master technician serving the greater Knoxville area. With a fully-equipped mobile service truck, David brings the repair shop directly to your driveway, office parking lot, or wherever your vehicle is. With over 610 five-star reviews, Mobile Auto Tech has become one of the most trusted names in Knoxville auto repair.</p>
                 <div class="about-features">
                     <div class="about-feature">
@@ -499,21 +593,23 @@
     </div>
 </section>
 
-<!-- GALLERY -->
-<section id="gallery" style="background:var(--bg-card)">
+<!-- GALLERY — HORIZONTAL SCROLL -->
+<section id="gallery" class="gallery-section">
     <div class="section-inner center">
         <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Our Work</div>
-        <h2 class="section-title">See the Quality Difference</h2>
+        <h2 class="section-title wipe-reveal">See the Quality Difference</h2>
         <p class="section-subtitle">Real work. Real results. Professional auto repair done right at your location.</p>
-        <div class="gallery-grid">
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-under-hood.jpg" alt="Mechanic working under hood" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/engine-bay.jpg" alt="Engine bay inspection" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/brake-repair.jpg" alt="Brake repair work" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/oil-change.jpg" alt="Oil change service" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/real-roadside.webp" alt="Mobile Auto Tech roadside tire change" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/car-diagnostics.jpg" alt="Car diagnostics" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-tools.jpg" alt="Professional mechanic tools" loading="lazy"></div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/real-roadside2.webp" alt="Mobile Auto Tech highway roadside service" loading="lazy"></div>
+    </div>
+    <div class="gallery-horizontal-wrapper">
+        <div class="gallery-horizontal" id="gallery-track">
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/mechanic-under-hood.jpg" alt="Mechanic working under hood" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/engine-bay.jpg" alt="Engine bay inspection" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/brake-repair.jpg" alt="Brake repair work" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/oil-change.jpg" alt="Oil change service" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/mechanic-outdoor.jpg" alt="Mobile mechanic outdoor repair" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/car-diagnostics.jpg" alt="Car diagnostics" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/mechanic-tools.jpg" alt="Professional mechanic tools" loading="lazy"></div>
+            <div class="gallery-item" onclick="openLightbox(this)"><img src="images/mechanic-working.jpg" alt="Mechanic at work" loading="lazy"></div>
         </div>
     </div>
 </section>
@@ -524,97 +620,70 @@
     <img id="lightbox-img" src="" alt="Gallery image">
 </div>
 
-<!-- REVIEWS - Auto-scrolling carousel -->
+<!-- REVIEWS -->
 <section id="reviews">
     <div class="section-inner center">
         <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Testimonials</div>
-        <h2 class="section-title">610+ Five-Star Reviews</h2>
+        <h2 class="section-title wipe-reveal">610+ Five-Star Reviews</h2>
         <p class="section-subtitle">Don't take our word for it. Here's what Knoxville drivers are saying.</p>
-        <div class="reviews-scroll-container">
-            <div class="reviews-track" id="reviews-track">
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
-                    <div class="review-author"><div class="review-avatar">G</div><div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
-                    <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
-                    <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
-                    <div class="review-author"><div class="review-avatar">R</div><div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
-                    <div class="review-author"><div class="review-avatar">T</div><div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
-                    <div class="review-author"><div class="review-avatar">M</div><div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div></div>
-                </div>
-                <!-- Duplicated for infinite scroll -->
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
-                    <div class="review-author"><div class="review-avatar">G</div><div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
-                    <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
-                    <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
-                    <div class="review-author"><div class="review-avatar">R</div><div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
-                    <div class="review-author"><div class="review-avatar">T</div><div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-stars">★★★★★</div>
-                    <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
-                    <div class="review-author"><div class="review-avatar">M</div><div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div></div>
-                </div>
+        <div class="reviews-grid" id="reviews-grid">
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
+                <div class="review-author"><div class="review-avatar">G</div><div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div></div>
+            </div>
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
+                <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div></div>
+            </div>
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
+                <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div></div>
+            </div>
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
+                <div class="review-author"><div class="review-avatar">R</div><div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div></div>
+            </div>
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
+                <div class="review-author"><div class="review-avatar">T</div><div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div></div>
+            </div>
+            <div class="review-card">
+                <div class="quote-mark">"</div>
+                <div class="review-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+                <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
+                <div class="review-author"><div class="review-avatar">M</div><div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div></div>
             </div>
         </div>
     </div>
 </section>
 
 <!-- STATS -->
-<section class="stats-section">
+<section class="stats-section" id="stats">
     <div class="section-inner">
         <div class="stats-grid">
-            <div class="stat-item fade-up">
+            <div class="stat-item">
                 <div class="stat-number" data-target="610">0</div>
                 <div class="stat-label">Google Reviews</div>
             </div>
-            <div class="stat-item fade-up">
+            <div class="stat-item">
                 <div class="stat-number" data-target="4.8" data-decimal="true">0</div>
                 <div class="stat-label">Star Rating</div>
             </div>
-            <div class="stat-item fade-up">
+            <div class="stat-item">
                 <div class="stat-number" data-target="1000">0</div>
                 <div class="stat-label">Cars Serviced</div>
             </div>
-            <div class="stat-item fade-up">
+            <div class="stat-item">
                 <div class="stat-number" data-static="true">Same-Day</div>
                 <div class="stat-label">Service Available</div>
             </div>
@@ -628,11 +697,11 @@
     <div class="cta-banner-content">
         <h2>Ready to Get Your<br>Car Fixed?</h2>
         <p>Skip the dealership. Skip the tow truck. Get your car fixed today — right where it sits.</p>
-        <a href="tel:8653375911" class="btn btn-primary" style="font-size:1.1rem;padding:18px 44px">
+        <a href="tel:8653375911" class="btn btn-primary magnetic" style="font-size:1.1rem;padding:18px 44px">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             Call David Now
         </a>
-        <a href="tel:8653375911" class="cta-phone">(865) 337-5911</a>
+        <a href="tel:8653375911" class="cta-phone phone-link">(865) 337-5911</a>
     </div>
 </div>
 
@@ -642,11 +711,11 @@
         <div class="contact-grid">
             <div>
                 <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Get In Touch</div>
-                <h2 class="section-title">Let's Get You<br>Back on the Road</h2>
+                <h2 class="section-title wipe-reveal">Let's Get You<br>Back on the Road</h2>
                 <p class="section-subtitle">Call, text, or fill out the form. We'll get back to you fast.</p>
                 <div class="contact-info-card">
                     <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-                    <div><h4>Call or Text</h4><p><a href="tel:8653375911">(865) 337-5911</a></p></div>
+                    <div><h4>Call or Text</h4><p><a href="tel:8653375911" class="phone-link">(865) 337-5911</a></p></div>
                 </div>
                 <div class="contact-info-card">
                     <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -665,12 +734,12 @@
                 <form class="contact-form" action="https://formspree.io/f/xpwzgkqr" method="POST">
                     <h3>✉️ Request a Free Quote</h3>
                     <div class="form-row">
-                        <div class="form-group"><label for="name">Full Name</label><input type="text" id="name" name="name" required placeholder="John Smith"></div>
-                        <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required placeholder="(865) 555-1234"></div>
+                        <div class="form-group"><label for="name">Full Name</label><input type="text" id="name" name="name" required placeholder="John Smith"><div class="input-line"></div></div>
+                        <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required placeholder="(865) 555-1234"><div class="input-line"></div></div>
                     </div>
-                    <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="john@email.com"></div>
+                    <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="john@email.com"><div class="input-line"></div></div>
                     <div class="form-row">
-                        <div class="form-group"><label for="vehicle">Vehicle (Year, Make, Model)</label><input type="text" id="vehicle" name="vehicle" placeholder="2019 Honda Civic"></div>
+                        <div class="form-group"><label for="vehicle">Vehicle (Year, Make, Model)</label><input type="text" id="vehicle" name="vehicle" placeholder="2019 Honda Civic"><div class="input-line"></div></div>
                         <div class="form-group"><label for="service">Service Needed</label>
                             <select id="service" name="service">
                                 <option value="">Select a service...</option>
@@ -682,14 +751,15 @@
                                 <option value="roadside">Roadside Assistance</option>
                                 <option value="other">Other</option>
                             </select>
+                            <div class="input-line"></div>
                         </div>
                     </div>
-                    <div class="form-group"><label for="message">Describe the Problem</label><textarea id="message" name="message" placeholder="Tell us what's going on with your vehicle..."></textarea></div>
-                    <button type="submit" class="btn-submit">Get My Free Quote →</button>
+                    <div class="form-group"><label for="message">Describe the Problem</label><textarea id="message" name="message" placeholder="Tell us what's going on with your vehicle..."></textarea><div class="input-line"></div></div>
+                    <button type="submit" class="btn-submit magnetic">Get My Free Quote →</button>
                 </form>
             </div>
         </div>
-        <div class="map-container fade-up">
+        <div class="map-container">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.0!2d-84.028!3d35.934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDU2JzAyLjQiTiA4NMKwMDEnNDAuOCJX!5e0!3m2!1sen!2sus!4v1600000000000" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mobile Auto Tech Service location"></iframe>
         </div>
     </div>
@@ -746,25 +816,145 @@
     </div>
 </footer>
 
+<!-- FLOATING CALL BUTTON -->
+<a href="tel:8653375911" class="floating-call" id="floating-call">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+</a>
+
+<!-- BACK TO TOP -->
+<a href="#" class="back-to-top" id="back-to-top">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</a>
+
 <!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <!-- GSAP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <script>
+// ============ PERFORMANCE DETECTION ============
+const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const isLowPerf = isMobile || navigator.hardwareConcurrency < 4;
+const particleMultiplier = isLowPerf ? 0.3 : 1;
+
+// ============ LOADING SCREEN ============
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+    }, 2000);
+});
+
+// ============ CUSTOM CURSOR ============
+const cursorDot = document.getElementById('cursor-dot');
+const cursorTrail = document.getElementById('cursor-trail');
+let cx = 0, cy = 0, tx = 0, ty = 0;
+document.addEventListener('mousemove', e => {
+    tx = e.clientX; ty = e.clientY;
+    cursorDot.style.left = tx + 'px';
+    cursorDot.style.top = ty + 'px';
+});
+function animCursor() {
+    cx += (tx - cx) * 0.15;
+    cy += (ty - cy) * 0.15;
+    cursorTrail.style.left = cx + 'px';
+    cursorTrail.style.top = cy + 'px';
+    requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// Hover states for cursor
+document.querySelectorAll('a, button, .service-card, .gallery-item, .review-card, .step').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursorDot.classList.add('hovering'); cursorTrail.classList.add('hovering'); });
+    el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hovering'); cursorTrail.classList.remove('hovering'); });
+});
+
 // ============ MOUSE TRACKING ============
-let mouseX = 0, mouseY = 0, mouseNX = 0.5, mouseNY = 0.5;
+let mouseX = 0, mouseY = 0;
 document.addEventListener('mousemove', (e) => {
     mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
     mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    mouseNX = e.clientX / window.innerWidth;
-    mouseNY = e.clientY / window.innerHeight;
 });
 
-// ============ THREE.JS BACKGROUND PARTICLES (600+) ============
+// ============ HERO TEXT ANIMATION ============
+(function() {
+    const title = document.getElementById('hero-title');
+    const text = title.textContent;
+    title.innerHTML = '';
+    let charIndex = 0;
+    text.split('').forEach((char, i) => {
+        if (char === ' ') {
+            title.innerHTML += ' ';
+        } else {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.textContent = char;
+            span.style.animationDelay = (0.8 + i * 0.04) + 's';
+            title.appendChild(span);
+        }
+    });
+})();
+
+// ============ SPARK PARTICLES (2D CANVAS) ============
+(function(){
+    const canvas = document.getElementById('spark-canvas');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    function resize() { w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const count = Math.floor(80 * particleMultiplier);
+    const sparks = [];
+    function spawnSpark() {
+        const cx = w * 0.5 + (Math.random() - 0.5) * w * 0.3;
+        const cy = h * 0.45 + (Math.random() - 0.5) * h * 0.2;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1 + Math.random() * 3;
+        const isOrange = Math.random() > 0.4;
+        sparks.push({
+            x: cx, y: cy,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1,
+            life: 1,
+            decay: 0.008 + Math.random() * 0.015,
+            size: 1 + Math.random() * 2,
+            r: isOrange ? 255 : 0,
+            g: isOrange ? (120 + Math.random()*80) : (140 + Math.random()*60),
+            b: isOrange ? 0 : 255
+        });
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, w, h);
+        // Spawn
+        if (sparks.length < count && Math.random() > 0.5) spawnSpark();
+        for (let i = sparks.length - 1; i >= 0; i--) {
+            const s = sparks[i];
+            s.x += s.vx;
+            s.y += s.vy;
+            s.vy += 0.04; // gravity
+            s.vx *= 0.99;
+            s.life -= s.decay;
+            if (s.life <= 0) { sparks.splice(i, 1); continue; }
+            ctx.globalAlpha = s.life * 0.8;
+            ctx.fillStyle = `rgb(${s.r},${s.g},${s.b})`;
+            ctx.shadowColor = `rgb(${s.r},${s.g},${s.b})`;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+    }
+    animate();
+})();
+
+// ============ THREE.JS BACKGROUND PARTICLES ============
 (function(){
     const canvas = document.getElementById('three-bg');
-    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:false});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -772,11 +962,10 @@ document.addEventListener('mousemove', (e) => {
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
-    const particleCount = 600;
+    const particleCount = Math.floor(400 * particleMultiplier);
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
     const colors = new Float32Array(particleCount * 3);
 
     for(let i = 0; i < particleCount; i++){
@@ -786,26 +975,15 @@ document.addEventListener('mousemove', (e) => {
         velocities[i*3] = (Math.random()-0.5)*0.003;
         velocities[i*3+1] = (Math.random()-0.5)*0.003;
         velocities[i*3+2] = (Math.random()-0.5)*0.001;
-        sizes[i] = Math.random() * 0.06 + 0.01;
-        // Color variation: blue to cyan to white
         const t = Math.random();
         if(t < 0.5) { colors[i*3]=0; colors[i*3+1]=0.4+t; colors[i*3+2]=1; }
         else if(t < 0.8) { colors[i*3]=0; colors[i*3+1]=0.7; colors[i*3+2]=0.9; }
         else { colors[i*3]=0.8; colors[i*3+1]=0.9; colors[i*3+2]=1; }
     }
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const mat = new THREE.PointsMaterial({
-        size: 0.04,
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        vertexColors: true,
-        sizeAttenuation: true
-    });
+    const mat = new THREE.PointsMaterial({size:0.04,transparent:true,opacity:0.5,blending:THREE.AdditiveBlending,depthWrite:false,vertexColors:true,sizeAttenuation:true});
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
@@ -815,39 +993,20 @@ document.addEventListener('mousemove', (e) => {
         for(let i = 0; i < particleCount; i++){
             pos[i*3] += velocities[i*3];
             pos[i*3+1] += velocities[i*3+1];
-            pos[i*3+2] += velocities[i*3+2];
             if(Math.abs(pos[i*3])>12) velocities[i*3]*=-1;
             if(Math.abs(pos[i*3+1])>12) velocities[i*3+1]*=-1;
-            if(Math.abs(pos[i*3+2])>6) velocities[i*3+2]*=-1;
-
-            // Mouse repulsion
-            const dx = pos[i*3] - mouseX * 3;
-            const dy = pos[i*3+1] - (-mouseY) * 3;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if(dist < 2){
-                const force = (2 - dist) * 0.001;
-                velocities[i*3] += dx/dist * force;
-                velocities[i*3+1] += dy/dist * force;
-            }
-            // Damping
-            velocities[i*3] *= 0.999;
-            velocities[i*3+1] *= 0.999;
         }
         geo.attributes.position.needsUpdate = true;
         points.rotation.y += 0.0001;
         renderer.render(scene, camera);
     }
     animateBg();
-
-    window.addEventListener('resize', ()=>{
-        camera.aspect = window.innerWidth/window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    window.addEventListener('resize', ()=>{ camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
 })();
 
-// ============ THREE.JS HERO — 3D GEAR WITH METALLIC SHADER + GRID FLOOR ============
+// ============ THREE.JS HERO — INTERLOCKING GEARS ============
 (function(){
+    if (isMobile) return; // Skip heavy 3D on mobile
     const canvas = document.getElementById('hero-three');
     const heroSection = document.querySelector('.hero');
     const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
@@ -856,213 +1015,184 @@ document.addEventListener('mousemove', (e) => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, heroSection.offsetWidth/heroSection.offsetHeight, 0.1, 100);
-    camera.position.z = 5;
+    camera.position.z = 6;
     camera.position.y = 0.5;
 
-    // === BUILD GEAR SHAPE ===
-    function createGearShape(outerR, innerR, teeth, toothDepth, toothWidth) {
+    function createGearShape(outerR, innerR, teeth, toothWidth) {
         const shape = new THREE.Shape();
         const anglePerTooth = (Math.PI * 2) / teeth;
         const halfTooth = anglePerTooth * toothWidth;
-
         for (let i = 0; i < teeth; i++) {
             const a = i * anglePerTooth;
-            // Valley start
-            const v1x = Math.cos(a - halfTooth) * innerR;
-            const v1y = Math.sin(a - halfTooth) * innerR;
-            // Tooth outer start
-            const t1x = Math.cos(a - halfTooth * 0.6) * outerR;
-            const t1y = Math.sin(a - halfTooth * 0.6) * outerR;
-            // Tooth outer end
-            const t2x = Math.cos(a + halfTooth * 0.6) * outerR;
-            const t2y = Math.sin(a + halfTooth * 0.6) * outerR;
-            // Valley end
-            const v2x = Math.cos(a + halfTooth) * innerR;
-            const v2y = Math.sin(a + halfTooth) * innerR;
-            // Next valley start
+            const v1x = Math.cos(a - halfTooth) * innerR, v1y = Math.sin(a - halfTooth) * innerR;
+            const t1x = Math.cos(a - halfTooth * 0.6) * outerR, t1y = Math.sin(a - halfTooth * 0.6) * outerR;
+            const t2x = Math.cos(a + halfTooth * 0.6) * outerR, t2y = Math.sin(a + halfTooth * 0.6) * outerR;
+            const v2x = Math.cos(a + halfTooth) * innerR, v2y = Math.sin(a + halfTooth) * innerR;
             const nextA = (i + 1) * anglePerTooth;
-            const nv1x = Math.cos(nextA - halfTooth) * innerR;
-            const nv1y = Math.sin(nextA - halfTooth) * innerR;
-
-            if (i === 0) shape.moveTo(v1x, v1y);
-            else shape.lineTo(v1x, v1y);
-
-            shape.lineTo(t1x, t1y);
-            shape.lineTo(t2x, t2y);
-            shape.lineTo(v2x, v2y);
-            // Arc along inner radius to next tooth
-            // Simple line for now
-            shape.lineTo(nv1x, nv1y);
+            const nv1x = Math.cos(nextA - halfTooth) * innerR, nv1y = Math.sin(nextA - halfTooth) * innerR;
+            if (i === 0) shape.moveTo(v1x, v1y); else shape.lineTo(v1x, v1y);
+            shape.lineTo(t1x, t1y); shape.lineTo(t2x, t2y); shape.lineTo(v2x, v2y); shape.lineTo(nv1x, nv1y);
         }
         shape.closePath();
-
-        // Center hole
         const holePath = new THREE.Path();
-        const holeR = innerR * 0.45;
-        holePath.absarc(0, 0, holeR, 0, Math.PI * 2, true);
+        holePath.absarc(0, 0, innerR * 0.4, 0, Math.PI * 2, true);
         shape.holes.push(holePath);
-
         return shape;
     }
 
-    const gearShape = createGearShape(1.6, 1.25, 16, 0.35, 0.35);
-    const extrudeSettings = { depth: 0.35, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 3 };
-    const gearGeo = new THREE.ExtrudeGeometry(gearShape, extrudeSettings);
-    gearGeo.center();
-
-    // Metallic shader
     const gearVertShader = `
-        varying vec3 vNormal;
-        varying vec3 vPosition;
-        varying vec2 vUv;
+        varying vec3 vNormal; varying vec3 vPosition;
         void main(){
-            vUv = uv;
             vNormal = normalize(normalMatrix * normal);
             vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-    `;
+        }`;
     const gearFragShader = `
         uniform float uTime;
-        varying vec3 vNormal;
-        varying vec3 vPosition;
-        varying vec2 vUv;
+        varying vec3 vNormal; varying vec3 vPosition;
         void main(){
             vec3 viewDir = normalize(-vPosition);
             float fresnel = pow(1.0 - max(dot(vNormal, viewDir), 0.0), 3.0);
-
-            // Base metallic color — dark steel blue
-            vec3 baseColor = vec3(0.12, 0.16, 0.22);
-            // Accent blue highlight
-            vec3 accentColor = vec3(0.0, 0.64, 1.0);
-            // Specular
+            vec3 baseColor = vec3(0.1, 0.13, 0.18);
+            vec3 accent = vec3(0.0, 0.64, 1.0);
             vec3 lightDir = normalize(vec3(1.0, 1.0, 2.0));
             float spec = pow(max(dot(reflect(-lightDir, vNormal), viewDir), 0.0), 64.0);
             float spec2 = pow(max(dot(reflect(-normalize(vec3(-1.0, 0.5, 1.0)), vNormal), viewDir), 0.0), 32.0);
-
-            // Animated blue accent sweep
             float sweep = sin(vPosition.x * 2.0 + vPosition.y * 2.0 + uTime * 1.5) * 0.5 + 0.5;
+            vec3 color = baseColor + accent * fresnel * 0.7 + vec3(0.8,0.9,1.0) * spec * 0.8 + accent * spec2 * 0.4 + accent * sweep * 0.06 + accent * pow(fresnel, 2.0) * 0.3;
+            gl_FragColor = vec4(color, 0.92 + fresnel * 0.08);
+        }`;
 
-            vec3 color = baseColor;
-            color += accentColor * fresnel * 0.7;
-            color += vec3(0.8, 0.9, 1.0) * spec * 0.8;
-            color += accentColor * spec2 * 0.4;
-            color += accentColor * sweep * 0.08;
+    const extSettings = {depth:0.3, bevelEnabled:true, bevelThickness:0.03, bevelSize:0.03, bevelSegments:2};
 
-            // Edge glow
-            color += accentColor * pow(fresnel, 2.0) * 0.3;
+    // GEAR 1 — Main large gear
+    const shape1 = createGearShape(1.6, 1.25, 16, 0.35);
+    const geo1 = new THREE.ExtrudeGeometry(shape1, extSettings);
+    geo1.center();
+    const mat1 = new THREE.ShaderMaterial({vertexShader:gearVertShader, fragmentShader:gearFragShader, uniforms:{uTime:{value:0}}, transparent:true, side:THREE.DoubleSide});
+    const gear1 = new THREE.Mesh(geo1, mat1);
+    gear1.position.set(-0.3, 0, 0);
+    scene.add(gear1);
 
-            float alpha = 0.92 + fresnel * 0.08;
-            gl_FragColor = vec4(color, alpha);
-        }
-    `;
+    // GEAR 2 — Medium gear (meshing)
+    const shape2 = createGearShape(1.0, 0.78, 10, 0.35);
+    const geo2 = new THREE.ExtrudeGeometry(shape2, {...extSettings, depth:0.3});
+    geo2.center();
+    const mat2 = new THREE.ShaderMaterial({vertexShader:gearVertShader, fragmentShader:gearFragShader, uniforms:{uTime:{value:0}}, transparent:true, side:THREE.DoubleSide});
+    const gear2 = new THREE.Mesh(geo2, mat2);
+    gear2.position.set(2.1, 0.9, 0);
+    scene.add(gear2);
 
-    const gearMat = new THREE.ShaderMaterial({
-        vertexShader: gearVertShader,
-        fragmentShader: gearFragShader,
-        uniforms: { uTime: { value: 0 } },
-        transparent: true,
-        side: THREE.DoubleSide
+    // GEAR 3 — Small gear
+    const shape3 = createGearShape(0.7, 0.55, 8, 0.35);
+    const geo3 = new THREE.ExtrudeGeometry(shape3, {...extSettings, depth:0.3});
+    geo3.center();
+    const mat3 = new THREE.ShaderMaterial({vertexShader:gearVertShader, fragmentShader:gearFragShader, uniforms:{uTime:{value:0}}, transparent:true, side:THREE.DoubleSide});
+    const gear3 = new THREE.Mesh(geo3, mat3);
+    gear3.position.set(-2.0, -1.4, 0.2);
+    scene.add(gear3);
+
+    // Wireframe overlays
+    [gear1, gear2, gear3].forEach(g => {
+        const wGeo = g.geometry.clone();
+        const wire = new THREE.Mesh(wGeo, new THREE.MeshBasicMaterial({color:0x00A3FF, wireframe:true, transparent:true, opacity:0.04}));
+        wire.position.copy(g.position);
+        scene.add(wire);
+        g.userData.wire = wire;
     });
-
-    const gear = new THREE.Mesh(gearGeo, gearMat);
-    gear.rotation.x = Math.PI * 0.15;
-    scene.add(gear);
-
-    // Inner ring detail
-    const innerRingGeo = new THREE.TorusGeometry(0.55, 0.03, 16, 64);
-    const innerRingMat = new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.5});
-    const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
-    innerRing.rotation.x = Math.PI * 0.15;
-    scene.add(innerRing);
-
-    // Wireframe overlay
-    const wireGeo = new THREE.ExtrudeGeometry(gearShape, { ...extrudeSettings, depth: 0.36 });
-    wireGeo.center();
-    const wireMat = new THREE.MeshBasicMaterial({color: 0x00A3FF, wireframe: true, transparent: true, opacity: 0.06});
-    const wireGear = new THREE.Mesh(wireGeo, wireMat);
-    wireGear.rotation.x = Math.PI * 0.15;
-    scene.add(wireGear);
 
     // Orbital rings
-    const ring1 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.2, 0.008, 16, 128),
-        new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.25})
-    );
-    ring1.rotation.x = Math.PI * 0.4;
-    scene.add(ring1);
+    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(2.8, 0.006, 16, 128), new THREE.MeshBasicMaterial({color:0x00A3FF, transparent:true, opacity:0.2}));
+    ring1.rotation.x = Math.PI * 0.4; scene.add(ring1);
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.004, 16, 128), new THREE.MeshBasicMaterial({color:0x00A3FF, transparent:true, opacity:0.1}));
+    ring2.rotation.x = Math.PI * 0.6; ring2.rotation.y = Math.PI * 0.2; scene.add(ring2);
 
-    const ring2 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.5, 0.006, 16, 128),
-        new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.12})
-    );
-    ring2.rotation.x = Math.PI * 0.6;
-    ring2.rotation.y = Math.PI * 0.2;
-    scene.add(ring2);
-
-    // Grid floor (holographic workshop floor)
-    const gridGeo = new THREE.PlaneGeometry(20, 20, 40, 40);
+    // Grid floor
     const gridMat = new THREE.ShaderMaterial({
-        transparent: true,
-        uniforms: { uTime: { value: 0 } },
-        vertexShader: `
-            varying vec2 vUv;
-            void main(){
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            uniform float uTime;
-            varying vec2 vUv;
-            void main(){
-                vec2 grid = abs(fract(vUv * 20.0 - 0.5) - 0.5) / fwidth(vUv * 20.0);
-                float line = min(grid.x, grid.y);
-                float g = 1.0 - min(line, 1.0);
-                float dist = length(vUv - 0.5) * 2.0;
-                float fade = 1.0 - smoothstep(0.2, 0.8, dist);
-                float pulse = sin(uTime * 0.5) * 0.3 + 0.7;
-                gl_FragColor = vec4(0.0, 0.64, 1.0, g * fade * 0.12 * pulse);
-            }
-        `,
-        side: THREE.DoubleSide
+        transparent:true, uniforms:{uTime:{value:0}},
+        vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+        fragmentShader:`uniform float uTime;varying vec2 vUv;void main(){vec2 grid=abs(fract(vUv*20.0-0.5)-0.5)/fwidth(vUv*20.0);float line=min(grid.x,grid.y);float g=1.0-min(line,1.0);float dist=length(vUv-0.5)*2.0;float fade=1.0-smoothstep(0.2,0.8,dist);gl_FragColor=vec4(0.0,0.64,1.0,g*fade*0.1*(sin(uTime*0.5)*0.3+0.7));}`,
+        side:THREE.DoubleSide
     });
-    const grid = new THREE.Mesh(gridGeo, gridMat);
-    grid.rotation.x = -Math.PI * 0.5;
-    grid.position.y = -2.2;
-    scene.add(grid);
+    const grid = new THREE.Mesh(new THREE.PlaneGeometry(20,20,40,40), gridMat);
+    grid.rotation.x = -Math.PI*0.5; grid.position.y = -2.8; scene.add(grid);
 
-    // Scroll-triggered parallax offset
+    // Spark particles at gear mesh points
+    const sparkGeo = new THREE.BufferGeometry();
+    const sparkCount = Math.floor(60 * particleMultiplier);
+    const sparkPos = new Float32Array(sparkCount * 3);
+    const sparkVel = [];
+    const sparkLife = [];
+    for(let i=0;i<sparkCount;i++){
+        sparkPos[i*3]=2.1; sparkPos[i*3+1]=0.9; sparkPos[i*3+2]=0;
+        sparkVel.push({x:(Math.random()-0.5)*0.08,y:(Math.random()-0.5)*0.08+0.03,z:(Math.random()-0.5)*0.04});
+        sparkLife.push(Math.random());
+    }
+    sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos,3));
+    const sparkMat = new THREE.PointsMaterial({size:0.04,color:0xff8800,transparent:true,opacity:0.8,blending:THREE.AdditiveBlending,depthWrite:false});
+    const sparkPoints = new THREE.Points(sparkGeo, sparkMat);
+    scene.add(sparkPoints);
+
     let scrollOffset = 0;
-    window.addEventListener('scroll', () => {
-        scrollOffset = window.scrollY * 0.002;
-    });
+    window.addEventListener('scroll', () => { scrollOffset = window.scrollY * 0.002; });
+
+    const gear1Teeth = 16, gear2Teeth = 10, gear3Teeth = 8;
 
     function animateHero(){
         requestAnimationFrame(animateHero);
         const t = performance.now() * 0.001;
-        gearMat.uniforms.uTime.value = t;
+        mat1.uniforms.uTime.value = t;
+        mat2.uniforms.uTime.value = t;
+        mat3.uniforms.uTime.value = t;
         gridMat.uniforms.uTime.value = t;
 
-        // Rotate gear
-        gear.rotation.y = t * 0.2 + mouseX * 0.3;
-        gear.rotation.x = Math.PI * 0.15 + Math.sin(t * 0.15) * 0.1 + mouseY * 0.15;
-        gear.position.y = -scrollOffset;
+        const baseRot = t * 0.2;
+        const tiltX = Math.PI * 0.15 + Math.sin(t*0.15)*0.08 + mouseY * 0.1;
 
-        wireGear.rotation.y = gear.rotation.y;
-        wireGear.rotation.x = gear.rotation.x;
-        wireGear.position.y = gear.position.y;
+        gear1.rotation.z = baseRot;
+        gear1.rotation.x = tiltX;
+        gear1.position.y = -scrollOffset;
 
-        innerRing.rotation.y = gear.rotation.y;
-        innerRing.rotation.x = gear.rotation.x;
-        innerRing.position.y = gear.position.y;
+        // Counter-rotate gear2 (ratio based on teeth)
+        gear2.rotation.z = -baseRot * (gear1Teeth / gear2Teeth) + Math.PI / gear2Teeth;
+        gear2.rotation.x = tiltX;
+        gear2.position.y = 0.9 - scrollOffset;
 
-        ring1.rotation.z = t * 0.15;
-        ring1.position.y = gear.position.y;
-        ring2.rotation.z = -t * 0.1;
-        ring2.position.y = gear.position.y;
+        // Gear3 driven by gear1
+        gear3.rotation.z = -baseRot * (gear1Teeth / gear3Teeth);
+        gear3.rotation.x = tiltX;
+        gear3.position.y = -1.4 - scrollOffset;
 
-        grid.position.y = -2.2 - scrollOffset;
+        // Sync wireframes
+        [gear1, gear2, gear3].forEach(g => {
+            if(g.userData.wire) {
+                g.userData.wire.rotation.copy(g.rotation);
+                g.userData.wire.position.copy(g.position);
+            }
+        });
+
+        ring1.rotation.z = t * 0.1;
+        ring2.rotation.z = -t * 0.08;
+        grid.position.y = -2.8 - scrollOffset;
+
+        // Animate sparks at mesh point
+        const sp = sparkGeo.attributes.position.array;
+        for(let i=0;i<sparkCount;i++){
+            sparkLife[i] -= 0.015;
+            if(sparkLife[i] <= 0){
+                // Respawn at mesh point between gear1 and gear2
+                sp[i*3] = 1.0 + Math.random()*0.4;
+                sp[i*3+1] = 0.5 + Math.random()*0.4 - scrollOffset;
+                sp[i*3+2] = (Math.random()-0.5)*0.3;
+                sparkVel[i] = {x:(Math.random()-0.5)*0.06,y:Math.random()*0.05+0.02,z:(Math.random()-0.5)*0.03};
+                sparkLife[i] = 0.5 + Math.random()*0.5;
+            }
+            sp[i*3] += sparkVel[i].x;
+            sp[i*3+1] += sparkVel[i].y;
+            sp[i*3+2] += sparkVel[i].z;
+            sparkVel[i].y -= 0.001;
+        }
+        sparkGeo.attributes.position.needsUpdate = true;
 
         renderer.render(scene, camera);
     }
@@ -1076,17 +1206,9 @@ document.addEventListener('mousemove', (e) => {
 })();
 
 // ============ LIGHTBOX ============
-function openLightbox(el){
-    const img = el.querySelector('img');
-    document.getElementById('lightbox-img').src = img.src;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-function closeLightbox(){
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-}
-document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+function openLightbox(el){ const img=el.querySelector('img'); document.getElementById('lightbox-img').src=img.src; document.getElementById('lightbox').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); });
 
 // ============ NAVIGATION ============
 const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobile-menu');
@@ -1094,60 +1216,179 @@ hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');mob
 function closeMenu(){hamburger.classList.remove('active');mobileMenu.classList.remove('active')}
 window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
 
-// ============ SCROLL ANIMATIONS ============
+// ============ GSAP SCROLL ANIMATIONS ============
 gsap.registerPlugin(ScrollTrigger);
 
-// Fade-in observer
-const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1, rootMargin: '0px 0px -50px 0px'});
-document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+// Hero entrance
+gsap.from('.hero-content', {opacity:0, y:60, duration:1.2, delay:2.2, ease:'power3.out'});
+gsap.from('.hero-label', {opacity:0, y:20, duration:.8, delay:2.5, ease:'power2.out'});
+gsap.from('.hero-stats-line', {opacity:0, y:20, duration:.8, delay:2.9, ease:'power2.out'});
+gsap.from('.hero-buttons', {opacity:0, y:20, duration:.8, delay:3.1, ease:'power2.out'});
 
-// Service cards — staggered entrance
-const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if(e.isIntersecting){
-            const delay = parseInt(e.target.dataset.delay || 0) * 100;
-            setTimeout(() => e.target.classList.add('visible'), delay);
-            cardObs.unobserve(e.target);
+// Service cards — 3D flip in
+document.querySelectorAll('.service-card').forEach((card, i) => {
+    gsap.from(card, {
+        rotateY: 90, opacity: 0, duration: 0.8, delay: i * 0.12,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' }
+    });
+});
+
+// Wipe reveal for section titles
+document.querySelectorAll('.wipe-reveal').forEach(el => {
+    ScrollTrigger.create({
+        trigger: el, start: 'top 80%',
+        onEnter: () => el.classList.add('revealed')
+    });
+});
+
+// Steps animation
+document.querySelectorAll('.step').forEach((step, i) => {
+    gsap.from(step, {
+        y: 60, opacity: 0, duration: 0.8, delay: i * 0.2,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: step, start: 'top 85%' }
+    });
+});
+
+// About section parallax
+gsap.from('.about-visual', {
+    x: -80, opacity: 0, duration: 1, ease: 'power2.out',
+    scrollTrigger: { trigger: '.about-grid', start: 'top 75%' }
+});
+gsap.from('.about-features', {
+    x: 80, opacity: 0, duration: 1, delay: 0.2, ease: 'power2.out',
+    scrollTrigger: { trigger: '.about-grid', start: 'top 75%' }
+});
+
+// Gallery horizontal scroll
+const galleryTrack = document.getElementById('gallery-track');
+if (galleryTrack) {
+    const gallerySection = document.getElementById('gallery');
+    gsap.to(galleryTrack, {
+        x: () => -(galleryTrack.scrollWidth - window.innerWidth + 48),
+        ease: 'none',
+        scrollTrigger: {
+            trigger: gallerySection,
+            start: 'top top',
+            end: () => '+=' + (galleryTrack.scrollWidth - window.innerWidth),
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1
         }
     });
-}, {threshold: 0.1, rootMargin: '0px 0px -30px 0px'});
-document.querySelectorAll('.service-card').forEach(el => cardObs.observe(el));
+}
 
-// Counter animation — count up from 0 when scrolled into view
-const counterObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if(e.isIntersecting){
-            const el = e.target;
-            if(el.dataset.static) return;
-            counterObs.unobserve(el);
+// Reviews — 3D card fan-out
+document.querySelectorAll('.review-card').forEach((card, i) => {
+    gsap.from(card, {
+        rotateY: 45, rotateZ: (i % 2 === 0 ? -8 : 8), x: (i % 2 === 0 ? -60 : 60),
+        opacity: 0, duration: 0.8, delay: i * 0.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 85%' }
+    });
+    // Animate stars
+    card.querySelectorAll('.star').forEach((star, si) => {
+        star.style.animationDelay = (0.3 + si * 0.1) + 's';
+        star.style.animationPlayState = 'paused';
+    });
+    ScrollTrigger.create({
+        trigger: card, start: 'top 85%',
+        onEnter: () => card.querySelectorAll('.star').forEach(s => s.style.animationPlayState = 'running')
+    });
+});
+
+// Stats counter with glitch effect
+const statsSection = document.getElementById('stats');
+let statsCounted = false;
+ScrollTrigger.create({
+    trigger: statsSection, start: 'top 70%',
+    onEnter: () => {
+        if (statsCounted) return;
+        statsCounted = true;
+        document.querySelectorAll('.stat-number').forEach(el => {
+            if (el.dataset.static) return;
             const target = parseFloat(el.dataset.target);
             const decimal = el.dataset.decimal === 'true';
-            const duration = 2000;
+            const duration = 2500;
             const start = performance.now();
-            function update(now){
+            let glitchCount = 0;
+            function update(now) {
                 const p = Math.min((now - start) / duration, 1);
                 const eased = 1 - Math.pow(1 - p, 3);
-                const val = eased * target;
+                let val = eased * target;
+                // Glitch flicker
+                if (p < 0.9 && Math.random() > 0.92) {
+                    val = target * Math.random();
+                    el.style.opacity = '0.7';
+                } else {
+                    el.style.opacity = '1';
+                }
                 el.textContent = decimal ? val.toFixed(1) : Math.floor(val) + '+';
-                if(p < 1) requestAnimationFrame(update);
+                if (p < 1) requestAnimationFrame(update);
+                else el.textContent = decimal ? target.toFixed(1) : target + '+';
             }
             requestAnimationFrame(update);
+        });
+    }
+});
+
+// Nav active highlight
+const sections = ['services','gallery','about','reviews','contact'];
+sections.forEach(id => {
+    ScrollTrigger.create({
+        trigger: '#' + id, start: 'top center', end: 'bottom center',
+        onToggle: ({isActive}) => {
+            document.querySelectorAll('.nav-links a[data-section]').forEach(a => a.classList.remove('active'));
+            if (isActive) {
+                const link = document.querySelector(`.nav-links a[data-section="${id}"]`);
+                if (link) link.classList.add('active');
+            }
         }
     });
-}, {threshold: 0.5});
-document.querySelectorAll('.stat-number').forEach(el => counterObs.observe(el));
+});
 
-// GSAP hero entrance
-gsap.from('.hero-content', {opacity:0, y:60, duration:1.2, ease:'power3.out'});
-gsap.from('.hero-label', {opacity:0, y:20, duration:.8, delay:.3, ease:'power2.out'});
-gsap.from('.hero h1', {opacity:0, y:30, duration:1, delay:.5, ease:'power2.out'});
-gsap.from('.hero-stats-line', {opacity:0, y:20, duration:.8, delay:.7, ease:'power2.out'});
-gsap.from('.hero-buttons', {opacity:0, y:20, duration:.8, delay:.9, ease:'power2.out'});
+// ============ CARD 3D TILT ON MOUSE MOVE ============
+document.querySelectorAll('.service-card, .review-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateZ(10px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.4s ease';
+        setTimeout(() => card.style.transition = '', 400);
+    });
+});
 
-// Hero background parallax
-gsap.to('.hero-bg-img', {y:100, scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:1}});
+// ============ MAGNETIC BUTTONS ============
+document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x*0.15}px, ${y*0.15}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+    });
+});
+
+// ============ FLOATING CALL & BACK TO TOP ============
+const floatingCall = document.getElementById('floating-call');
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+    const show = window.scrollY > 600;
+    floatingCall.classList.toggle('visible', show);
+    backToTop.classList.toggle('visible', show);
+});
+
+// ============ PARALLAX ON SCROLL ============
+gsap.to('.hero-bg-layers', { y: 150, scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }});
+gsap.to('.cta-banner-bg', { y: -50, scrollTrigger: { trigger: '.cta-banner', start: 'top bottom', end: 'bottom top', scrub: 1 }});
+
 </script>
 </body>
 </html>
