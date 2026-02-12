@@ -68,8 +68,11 @@
         .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,0.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
         .nav.scrolled{background:rgba(0,0,0,0.95);border-bottom-color:var(--border-accent)}
         .nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px}
-        .logo{font-weight:800;font-size:1.25rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:12px;letter-spacing:-0.5px}
-        .logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#0066CC);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:#fff;box-shadow:0 0 20px var(--accent-glow)}
+        .logo{font-weight:800;font-size:1.25rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:-0.5px}
+        .logo svg{height:36px;width:auto}
+        .logo-text{display:flex;flex-direction:column;line-height:1.1}
+        .logo-text-top{font-size:.65rem;font-weight:600;letter-spacing:3px;color:var(--accent);text-transform:uppercase}
+        .logo-text-bottom{font-size:1.1rem;font-weight:900;letter-spacing:-0.5px}
         .nav-links{display:flex;align-items:center;gap:32px;list-style:none}
         .nav-links a{text-decoration:none;color:var(--text-dim);font-weight:500;font-size:.9rem;transition:color .2s;letter-spacing:0.2px}
         .nav-links a:hover{color:var(--text)}
@@ -88,6 +91,9 @@
         .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 24px 80px}
         .hero-bg-img{position:absolute;inset:0;background:url('images/hero-bg.jpg') center/cover no-repeat;opacity:0.15;z-index:0}
         .hero-bg-overlay{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,163,255,0.12) 0%,transparent 70%);z-index:1}
+        /* Scanline overlay */
+        .hero-scanlines{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);mix-blend-mode:multiply}
+        .hero-noise{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
         .hero-content{position:relative;z-index:3;max-width:800px}
         .hero-label{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:100px;border:1px solid var(--border-accent);background:rgba(0,163,255,0.05);color:var(--accent);font-size:.85rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:32px}
         .hero-label svg{width:16px;height:16px}
@@ -95,7 +101,6 @@
         .hero-sub{font-size:1.15rem;color:var(--text-dim);max-width:560px;margin:0 auto 48px;line-height:1.7;font-weight:400}
         .hero-stats-line{display:flex;justify-content:center;gap:32px;margin-bottom:48px;flex-wrap:wrap}
         .hero-stat{display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:.95rem;font-weight:500}
-        .hero-stat .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
         .hero-stat svg{width:18px;height:18px;color:var(--accent)}
         .hero-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
         .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:all .3s;border:none;cursor:pointer;letter-spacing:-0.2px}
@@ -106,7 +111,6 @@
         .btn svg{width:20px;height:20px}
 
         /* SVG ICON GLOW */
-        .icon-glow{filter:drop-shadow(0 0 6px var(--accent-glow))}
         .service-icon-svg{width:52px;height:52px;border-radius:12px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
         .service-icon-svg svg{width:28px;height:28px;color:var(--accent);filter:drop-shadow(0 0 8px var(--accent-glow))}
 
@@ -122,13 +126,14 @@
         .center .section-label{justify-content:center}
 
         .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-        .service-card{padding:0;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .4s;position:relative;overflow:hidden}
+        .service-card{padding:0;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .4s;position:relative;overflow:hidden;opacity:0;transform:translateY(40px)}
+        .service-card.visible{opacity:1;transform:translateY(0)}
         .service-card-img{width:100%;height:180px;object-fit:cover;display:block;opacity:0.7;transition:opacity .4s}
         .service-card:hover .service-card-img{opacity:1}
         .service-card-body{padding:28px}
-        .service-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,transparent,var(--accent),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;z-index:2}
+        .service-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,transparent,var(--accent),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;z-index:2;pointer-events:none}
         .service-card:hover::before{opacity:1}
-        .service-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--accent-dim)}
+        .service-card:hover{transform:translateY(-4px)!important;box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--accent-dim)}
         .service-card h3{font-size:1.15rem;font-weight:700;margin-bottom:10px;letter-spacing:-0.3px;display:flex;align-items:center;gap:10px}
         .service-card h3 svg{width:20px;height:20px;color:var(--accent);flex-shrink:0}
         .service-card p{color:var(--text-dim);font-size:.9rem;line-height:1.7}
@@ -175,8 +180,10 @@
         .lightbox-close:hover{background:rgba(255,255,255,0.2)}
 
         /* REVIEWS */
-        .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-        .review-card{padding:32px;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .3s}
+        .reviews-scroll-container{position:relative;overflow:hidden}
+        .reviews-track{display:flex;gap:20px;animation:reviewScroll 30s linear infinite;width:max-content}
+        .reviews-track:hover{animation-play-state:paused}
+        .review-card{padding:32px;border-radius:16px;background:var(--bg-card);border:1px solid var(--border);transition:all .3s;min-width:380px;max-width:380px;flex-shrink:0}
         .review-card:hover{border-color:var(--border-accent);box-shadow:0 0 20px var(--accent-dim)}
         .review-stars{color:#FFB800;font-size:1rem;margin-bottom:16px;letter-spacing:2px}
         .review-text{color:var(--text-dim);font-size:.9rem;line-height:1.8;margin-bottom:24px;font-style:italic}
@@ -184,6 +191,10 @@
         .review-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#0066CC);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
         .review-name{font-weight:600;font-size:.9rem}
         .review-source{color:var(--text-muted);font-size:.75rem;margin-top:2px}
+        @keyframes reviewScroll{
+            0%{transform:translateX(0)}
+            100%{transform:translateX(-50%)}
+        }
 
         /* STATS */
         .stats-section{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -239,15 +250,10 @@
         /* ANIMATIONS */
         .fade-up{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
         .fade-up.visible{opacity:1;transform:translateY(0)}
-        .fade-up:nth-child(2){transition-delay:.1s}
-        .fade-up:nth-child(3){transition-delay:.2s}
-        .fade-up:nth-child(4){transition-delay:.3s}
-        .fade-up:nth-child(5){transition-delay:.4s}
-        .fade-up:nth-child(6){transition-delay:.5s}
 
         /* RESPONSIVE */
         @media(max-width:1024px){
-            .services-grid,.reviews-grid{grid-template-columns:repeat(2,1fr)}
+            .services-grid{grid-template-columns:repeat(2,1fr)}
             .about-grid{grid-template-columns:1fr;gap:48px}
             .stats-grid{grid-template-columns:repeat(2,1fr);gap:24px}
             .gallery-grid{grid-template-columns:repeat(2,1fr)}
@@ -256,7 +262,7 @@
             section{padding:80px 24px}
             .nav-links{display:none}
             .hamburger{display:block}
-            .services-grid,.reviews-grid,.steps{grid-template-columns:1fr}
+            .services-grid,.steps{grid-template-columns:1fr}
             .steps::before{display:none}
             .contact-grid{grid-template-columns:1fr}
             .footer-inner{grid-template-columns:1fr}
@@ -266,6 +272,7 @@
             .stats-grid{grid-template-columns:1fr 1fr}
             .hero-buttons{flex-direction:column;align-items:center}
             .gallery-grid{grid-template-columns:1fr 1fr}
+            .review-card{min-width:300px;max-width:300px}
         }
     </style>
 </head>
@@ -278,8 +285,38 @@
 <nav class="nav" id="nav">
     <div class="nav-inner">
         <a href="#" class="logo">
-            <div class="logo-mark">M</div>
-            Mobile Auto Tech
+            <!-- SVG LOGO: Gear icon + wordmark -->
+            <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:38px;width:38px">
+                <defs>
+                    <linearGradient id="gear-grad" x1="0" y1="0" x2="44" y2="44">
+                        <stop offset="0%" stop-color="#00A3FF"/>
+                        <stop offset="100%" stop-color="#0066CC"/>
+                    </linearGradient>
+                </defs>
+                <!-- Gear body -->
+                <path d="M22 6 L24.5 2 L19.5 2 Z M22 38 L24.5 42 L19.5 42 Z M6 22 L2 19.5 L2 24.5 Z M38 22 L42 24.5 L42 19.5 Z
+                    M10.34 10.34 L7.1 8.52 L8.52 7.1 Z M33.66 33.66 L36.9 35.48 L35.48 36.9 Z
+                    M10.34 33.66 L8.52 36.9 L7.1 35.48 Z M33.66 10.34 L35.48 7.1 L36.9 8.52 Z" fill="url(#gear-grad)" opacity="0"/>
+                <!-- Clean gear with proper teeth -->
+                <circle cx="22" cy="22" r="14" stroke="url(#gear-grad)" stroke-width="2.5" fill="none"/>
+                <circle cx="22" cy="22" r="8" stroke="url(#gear-grad)" stroke-width="2" fill="none"/>
+                <circle cx="22" cy="22" r="3" fill="url(#gear-grad)"/>
+                <!-- Gear teeth -->
+                <rect x="20" y="1" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
+                <rect x="20" y="36" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
+                <rect x="1" y="20" width="7" height="4" rx="1" fill="url(#gear-grad)"/>
+                <rect x="36" y="20" width="7" height="4" rx="1" fill="url(#gear-grad)"/>
+                <rect x="8.2" y="5.8" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(45 10.2 9.3)"/>
+                <rect x="31.8" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(45 33.8 34.7)"/>
+                <rect x="31.8" y="5.8" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 33.8 9.3)"/>
+                <rect x="8.2" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 10.2 34.7)"/>
+                <!-- Wrench overlay integrated -->
+                <path d="M18 18 L12 12 M12 12 L10 14 L8 12 L12 8 L14 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+            </svg>
+            <div class="logo-text">
+                <span class="logo-text-top">Mobile</span>
+                <span class="logo-text-bottom">AUTO TECH</span>
+            </div>
         </a>
         <ul class="nav-links">
             <li><a href="#services">Services</a></li>
@@ -310,6 +347,8 @@
 <section class="hero">
     <div class="hero-bg-img"></div>
     <div class="hero-bg-overlay"></div>
+    <div class="hero-scanlines"></div>
+    <div class="hero-noise"></div>
     <canvas id="hero-three"></canvas>
     <div class="hero-content">
         <div class="hero-label">
@@ -354,63 +393,45 @@
         <h2 class="section-title">Complete Auto Repair,<br>Right at Your Door</h2>
         <p class="section-subtitle">From routine maintenance to complex repairs — all at your location.</p>
         <div class="services-grid">
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="0">
                 <img src="images/oil-change.jpg" alt="Oil change service" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                        Oil Changes
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>Oil Changes</h3>
                     <p>Full synthetic, conventional, or high-mileage oil changes with filter replacement. Quick and convenient at your location.</p>
                 </div>
             </div>
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="1">
                 <img src="images/brake-repair.jpg" alt="Brake repair service" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                        Brake Service
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Brake Service</h3>
                     <p>Brake pad replacement, rotor resurfacing, brake fluid flush, and complete brake system diagnostics.</p>
                 </div>
             </div>
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="2">
                 <img src="images/car-diagnostics.jpg" alt="A/C repair service" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                        A/C Repair
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>A/C Repair</h3>
                     <p>Air conditioning recharge, leak repair, compressor replacement, and full system diagnostics.</p>
                 </div>
             </div>
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="3">
                 <img src="images/engine-bay.jpg" alt="Engine diagnostics" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        Engine Diagnostics
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Engine Diagnostics</h3>
                     <p>Check engine light diagnosis, computer scanning, engine repair, timing belts, water pumps, and more.</p>
                 </div>
             </div>
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="4">
                 <img src="images/mechanic-tools.jpg" alt="Electrical repair" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        Starters & Alternators
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Starters & Alternators</h3>
                     <p>Alternator replacement, starter repair, battery service, and complete electrical system diagnostics.</p>
                 </div>
             </div>
-            <div class="service-card fade-up">
+            <div class="service-card" data-delay="5">
                 <img src="images/mechanic-working.jpg" alt="Roadside assistance" class="service-card-img" loading="lazy">
                 <div class="service-card-body">
-                    <h3>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                        Roadside Assistance
-                    </h3>
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Roadside Assistance</h3>
                     <p>Stranded? We come to you with emergency roadside service. Jump starts, belt repairs, and on-the-spot diagnostics.</p>
                 </div>
             </div>
@@ -421,31 +442,22 @@
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how-it-works">
     <div class="section-inner center">
-        <div class="section-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            How It Works
-        </div>
+        <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>How It Works</div>
         <h2 class="section-title">Three Simple Steps</h2>
         <p class="section-subtitle">Skip the dealership. Skip the waiting room. We bring the shop to you.</p>
         <div class="steps">
             <div class="step fade-up">
-                <div class="step-num">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </div>
+                <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
                 <h3>Call or Text Us</h3>
                 <p>Tell us what's going on with your vehicle. We'll give you an honest quote right over the phone.</p>
             </div>
             <div class="step fade-up">
-                <div class="step-num">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                </div>
+                <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
                 <h3>We Come to You</h3>
                 <p>David arrives at your home or workplace in a fully-equipped service truck. No tow truck needed.</p>
             </div>
             <div class="step fade-up">
-                <div class="step-num">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                </div>
+                <div class="step-num"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                 <h3>Get Back on the Road</h3>
                 <p>Your car is fixed on the spot. Fair prices, quality work, and you never left your driveway.</p>
             </div>
@@ -461,35 +473,24 @@
                 <img src="images/mechanic-under-hood.jpg" alt="Mobile Auto Tech mechanic working under the hood" loading="lazy">
             </div>
             <div class="fade-up">
-                <div class="section-label">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    About Us
-                </div>
+                <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>About Us</div>
                 <h2 class="section-title">The Mechanic<br>Knoxville Trusts</h2>
                 <p style="color:var(--text-dim);margin-bottom:36px;line-height:1.8;font-size:.95rem">Mobile Auto Tech Service Center is owned and operated by David, a master technician serving the greater Knoxville area. With a fully-equipped mobile service truck, David brings the repair shop directly to your driveway, office parking lot, or wherever your vehicle is. With over 610 five-star reviews, Mobile Auto Tech has become one of the most trusted names in Knoxville auto repair.</p>
                 <div class="about-features">
                     <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                        </div>
+                        <div class="about-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
                         <div><h4>We Come to You</h4><p>No towing costs. No waiting rooms. Repairs done right at your home or workplace.</p></div>
                     </div>
                     <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
+                        <div class="about-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                         <div><h4>Honest, Fair Pricing</h4><p>Upfront quotes with no hidden fees. We explain everything before we start.</p></div>
                     </div>
                     <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        </div>
+                        <div class="about-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                         <div><h4>Fast Turnaround</h4><p>Most repairs completed same-day. Many jobs done in under an hour on-site.</p></div>
                     </div>
                     <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                        </div>
+                        <div class="about-feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
                         <div><h4>All Makes & Models</h4><p>Cars, trucks, SUVs — domestic and import. David's seen it all and fixed it all.</p></div>
                     </div>
                 </div>
@@ -501,37 +502,18 @@
 <!-- GALLERY -->
 <section id="gallery" style="background:var(--bg-card)">
     <div class="section-inner center">
-        <div class="section-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            Our Work
-        </div>
+        <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Our Work</div>
         <h2 class="section-title">See the Quality Difference</h2>
         <p class="section-subtitle">Real work. Real results. Professional auto repair done right at your location.</p>
         <div class="gallery-grid">
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/mechanic-under-hood.jpg" alt="Mechanic working under hood" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/engine-bay.jpg" alt="Engine bay inspection" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/brake-repair.jpg" alt="Brake repair work" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/oil-change.jpg" alt="Oil change service" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/mechanic-outdoor.jpg" alt="Mobile mechanic outdoor repair" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/car-diagnostics.jpg" alt="Car diagnostics" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/mechanic-tools.jpg" alt="Professional mechanic tools" loading="lazy">
-            </div>
-            <div class="gallery-item fade-up" onclick="openLightbox(this)">
-                <img src="images/mechanic-working.jpg" alt="Mechanic at work" loading="lazy">
-            </div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-under-hood.jpg" alt="Mechanic working under hood" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/engine-bay.jpg" alt="Engine bay inspection" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/brake-repair.jpg" alt="Brake repair work" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/oil-change.jpg" alt="Oil change service" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-outdoor.jpg" alt="Mobile mechanic outdoor repair" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/car-diagnostics.jpg" alt="Car diagnostics" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-tools.jpg" alt="Professional mechanic tools" loading="lazy"></div>
+            <div class="gallery-item fade-up" onclick="openLightbox(this)"><img src="images/mechanic-working.jpg" alt="Mechanic at work" loading="lazy"></div>
         </div>
     </div>
 </section>
@@ -542,62 +524,74 @@
     <img id="lightbox-img" src="" alt="Gallery image">
 </div>
 
-<!-- REVIEWS -->
+<!-- REVIEWS - Auto-scrolling carousel -->
 <section id="reviews">
     <div class="section-inner center">
-        <div class="section-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            Testimonials
-        </div>
+        <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Testimonials</div>
         <h2 class="section-title">610+ Five-Star Reviews</h2>
         <p class="section-subtitle">Don't take our word for it. Here's what Knoxville drivers are saying.</p>
-        <div class="reviews-grid">
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
-                <div class="review-author">
-                    <div class="review-avatar">G</div>
-                    <div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div>
+        <div class="reviews-scroll-container">
+            <div class="reviews-track" id="reviews-track">
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
+                    <div class="review-author"><div class="review-avatar">G</div><div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div></div>
                 </div>
-            </div>
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
-                <div class="review-author">
-                    <div class="review-avatar">S</div>
-                    <div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
+                    <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div></div>
                 </div>
-            </div>
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
-                <div class="review-author">
-                    <div class="review-avatar">K</div>
-                    <div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
+                    <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div></div>
                 </div>
-            </div>
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
-                <div class="review-author">
-                    <div class="review-avatar">R</div>
-                    <div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
+                    <div class="review-author"><div class="review-avatar">R</div><div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div></div>
                 </div>
-            </div>
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
-                <div class="review-author">
-                    <div class="review-avatar">T</div>
-                    <div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
+                    <div class="review-author"><div class="review-avatar">T</div><div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div></div>
                 </div>
-            </div>
-            <div class="review-card fade-up">
-                <div class="review-stars">★★★★★</div>
-                <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
-                <div class="review-author">
-                    <div class="review-avatar">M</div>
-                    <div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
+                    <div class="review-author"><div class="review-avatar">M</div><div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div></div>
+                </div>
+                <!-- Duplicated for infinite scroll -->
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"David is an amazing mechanic! He went above and beyond fixing a few minor things on top of the main job free of charge. I don't think I have ever got a good deal with a mechanic before today. I'd give him 6 stars if I could."</p>
+                    <div class="review-author"><div class="review-avatar">G</div><div><div class="review-name">Google Reviewer</div><div class="review-source">Google Review · Jan 2026</div></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I would like to express my sincere appreciation for the excellent service. David did a wonderful job explaining every aspect of the work needed. He efficiently completed all tasks with great care and precision. Highly recommend!"</p>
+                    <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Satisfied Customer</div><div class="review-source">Google Review · 2025</div></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Excellent diagnostics and service! My vehicle was accurately diagnosed, repaired, and back on the road the same day. Prices are fair and the service was fast. Best mobile mechanic in town!"</p>
+                    <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Knox County Driver</div><div class="review-source">Google Review · 2025</div></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"He always fixes our Honda for us and double checks his work. Thank you, David for all of your hard work and time you have taken away from your family to get us back on the road! Great guy and great prices!"</p>
+                    <div class="review-author"><div class="review-avatar">R</div><div><div class="review-name">Repeat Customer</div><div class="review-source">Google Review · 2025</div></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The mechanic was nice and very professional and knowledgeable in his work! He comes fully equipped in his work truck and does an awesome job at a fair price. I highly recommend him!"</p>
+                    <div class="review-author"><div class="review-avatar">T</div><div><div class="review-name">Knoxville Resident</div><div class="review-source">Google Review · Dec 2025</div></div></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Dave came out and replaced my rear brakes. Very quick and honest! Will definitely be a repeat customer. Recommend him over big box companies!"</p>
+                    <div class="review-author"><div class="review-avatar">M</div><div><div class="review-name">Maryville Driver</div><div class="review-source">Google Review · Dec 2025</div></div></div>
                 </div>
             </div>
         </div>
@@ -647,34 +641,23 @@
     <div class="section-inner">
         <div class="contact-grid">
             <div>
-                <div class="section-label">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                    Get In Touch
-                </div>
+                <div class="section-label"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Get In Touch</div>
                 <h2 class="section-title">Let's Get You<br>Back on the Road</h2>
                 <p class="section-subtitle">Call, text, or fill out the form. We'll get back to you fast.</p>
                 <div class="contact-info-card">
-                    <div class="contact-info-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    </div>
+                    <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
                     <div><h4>Call or Text</h4><p><a href="tel:8653375911">(865) 337-5911</a></p></div>
                 </div>
                 <div class="contact-info-card">
-                    <div class="contact-info-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    </div>
+                    <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
                     <div><h4>Location</h4><p>8403 Kingston Pike, Ste C<br>Knoxville, TN 37919</p></div>
                 </div>
                 <div class="contact-info-card">
-                    <div class="contact-info-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    </div>
+                    <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                     <div><h4>Hours</h4><p>Monday – Saturday: 9AM – 7PM<br>Sunday: Closed</p></div>
                 </div>
                 <div class="contact-info-card">
-                    <div class="contact-info-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
-                    </div>
+                    <div class="contact-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
                     <div><h4>Service Area</h4><p>Knoxville, Maryville, Oak Ridge<br>Knox, Blount & Anderson Counties</p></div>
                 </div>
             </div>
@@ -682,26 +665,13 @@
                 <form class="contact-form" action="https://formspree.io/f/xpwzgkqr" method="POST">
                     <h3>✉️ Request a Free Quote</h3>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required placeholder="John Smith">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required placeholder="(865) 555-1234">
-                        </div>
+                        <div class="form-group"><label for="name">Full Name</label><input type="text" id="name" name="name" required placeholder="John Smith"></div>
+                        <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone" required placeholder="(865) 555-1234"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="john@email.com">
-                    </div>
+                    <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" name="email" placeholder="john@email.com"></div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="vehicle">Vehicle (Year, Make, Model)</label>
-                            <input type="text" id="vehicle" name="vehicle" placeholder="2019 Honda Civic">
-                        </div>
-                        <div class="form-group">
-                            <label for="service">Service Needed</label>
+                        <div class="form-group"><label for="vehicle">Vehicle (Year, Make, Model)</label><input type="text" id="vehicle" name="vehicle" placeholder="2019 Honda Civic"></div>
+                        <div class="form-group"><label for="service">Service Needed</label>
                             <select id="service" name="service">
                                 <option value="">Select a service...</option>
                                 <option value="oil-change">Oil Change</option>
@@ -714,10 +684,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="message">Describe the Problem</label>
-                        <textarea id="message" name="message" placeholder="Tell us what's going on with your vehicle..."></textarea>
-                    </div>
+                    <div class="form-group"><label for="message">Describe the Problem</label><textarea id="message" name="message" placeholder="Tell us what's going on with your vehicle..."></textarea></div>
                     <button type="submit" class="btn-submit">Get My Free Quote →</button>
                 </form>
             </div>
@@ -733,8 +700,23 @@
     <div class="footer-inner">
         <div class="footer-brand">
             <a href="#" class="logo">
-                <div class="logo-mark">M</div>
-                Mobile Auto Tech
+                <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:36px;width:36px">
+                    <circle cx="22" cy="22" r="14" stroke="url(#gear-grad)" stroke-width="2.5" fill="none"/>
+                    <circle cx="22" cy="22" r="8" stroke="url(#gear-grad)" stroke-width="2" fill="none"/>
+                    <circle cx="22" cy="22" r="3" fill="url(#gear-grad)"/>
+                    <rect x="20" y="1" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
+                    <rect x="20" y="36" width="4" height="7" rx="1" fill="url(#gear-grad)"/>
+                    <rect x="1" y="20" width="7" height="4" rx="1" fill="url(#gear-grad)"/>
+                    <rect x="36" y="20" width="7" height="4" rx="1" fill="url(#gear-grad)"/>
+                    <rect x="8.2" y="5.8" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(45 10.2 9.3)"/>
+                    <rect x="31.8" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(45 33.8 34.7)"/>
+                    <rect x="31.8" y="5.8" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 33.8 9.3)"/>
+                    <rect x="8.2" y="31.2" width="4" height="7" rx="1" fill="url(#gear-grad)" transform="rotate(-45 10.2 34.7)"/>
+                </svg>
+                <div class="logo-text">
+                    <span class="logo-text-top">Mobile</span>
+                    <span class="logo-text-bottom">AUTO TECH</span>
+                </div>
             </a>
             <p>Knoxville's most trusted mobile mechanic service. We bring expert auto repair directly to your home or workplace. 610+ five-star reviews.</p>
         </div>
@@ -770,7 +752,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-// ============ THREE.JS BACKGROUND PARTICLES ============
+// ============ MOUSE TRACKING ============
+let mouseX = 0, mouseY = 0, mouseNX = 0.5, mouseNY = 0.5;
+document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    mouseNX = e.clientX / window.innerWidth;
+    mouseNY = e.clientY / window.innerHeight;
+});
+
+// ============ THREE.JS BACKGROUND PARTICLES (600+) ============
 (function(){
     const canvas = document.getElementById('three-bg');
     const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
@@ -781,28 +772,39 @@
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
-    // Floating particles
-    const particleCount = 200;
+    const particleCount = 600;
     const geo = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
-    for(let i=0; i<particleCount; i++){
-        positions[i*3] = (Math.random()-0.5)*20;
-        positions[i*3+1] = (Math.random()-0.5)*20;
-        positions[i*3+2] = (Math.random()-0.5)*10;
-        velocities[i*3] = (Math.random()-0.5)*0.002;
-        velocities[i*3+1] = (Math.random()-0.5)*0.002;
+    const sizes = new Float32Array(particleCount);
+    const colors = new Float32Array(particleCount * 3);
+
+    for(let i = 0; i < particleCount; i++){
+        positions[i*3] = (Math.random()-0.5)*25;
+        positions[i*3+1] = (Math.random()-0.5)*25;
+        positions[i*3+2] = (Math.random()-0.5)*12;
+        velocities[i*3] = (Math.random()-0.5)*0.003;
+        velocities[i*3+1] = (Math.random()-0.5)*0.003;
         velocities[i*3+2] = (Math.random()-0.5)*0.001;
+        sizes[i] = Math.random() * 0.06 + 0.01;
+        // Color variation: blue to cyan to white
+        const t = Math.random();
+        if(t < 0.5) { colors[i*3]=0; colors[i*3+1]=0.4+t; colors[i*3+2]=1; }
+        else if(t < 0.8) { colors[i*3]=0; colors[i*3+1]=0.7; colors[i*3+2]=0.9; }
+        else { colors[i*3]=0.8; colors[i*3+1]=0.9; colors[i*3+2]=1; }
     }
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const mat = new THREE.PointsMaterial({
-        color: 0x00A3FF,
-        size: 0.03,
+        size: 0.04,
         transparent: true,
         opacity: 0.6,
         blending: THREE.AdditiveBlending,
-        depthWrite: false
+        depthWrite: false,
+        vertexColors: true,
+        sizeAttenuation: true
     });
     const points = new THREE.Points(geo, mat);
     scene.add(points);
@@ -810,16 +812,29 @@
     function animateBg(){
         requestAnimationFrame(animateBg);
         const pos = geo.attributes.position.array;
-        for(let i=0; i<particleCount; i++){
+        for(let i = 0; i < particleCount; i++){
             pos[i*3] += velocities[i*3];
             pos[i*3+1] += velocities[i*3+1];
             pos[i*3+2] += velocities[i*3+2];
-            if(Math.abs(pos[i*3])>10) velocities[i*3]*=-1;
-            if(Math.abs(pos[i*3+1])>10) velocities[i*3+1]*=-1;
-            if(Math.abs(pos[i*3+2])>5) velocities[i*3+2]*=-1;
+            if(Math.abs(pos[i*3])>12) velocities[i*3]*=-1;
+            if(Math.abs(pos[i*3+1])>12) velocities[i*3+1]*=-1;
+            if(Math.abs(pos[i*3+2])>6) velocities[i*3+2]*=-1;
+
+            // Mouse repulsion
+            const dx = pos[i*3] - mouseX * 3;
+            const dy = pos[i*3+1] - (-mouseY) * 3;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist < 2){
+                const force = (2 - dist) * 0.001;
+                velocities[i*3] += dx/dist * force;
+                velocities[i*3+1] += dy/dist * force;
+            }
+            // Damping
+            velocities[i*3] *= 0.999;
+            velocities[i*3+1] *= 0.999;
         }
         geo.attributes.position.needsUpdate = true;
-        points.rotation.y += 0.0002;
+        points.rotation.y += 0.0001;
         renderer.render(scene, camera);
     }
     animateBg();
@@ -831,106 +846,224 @@
     });
 })();
 
-// ============ THREE.JS HERO 3D SPHERE WITH SHADERS ============
+// ============ THREE.JS HERO — 3D GEAR WITH METALLIC SHADER + GRID FLOOR ============
 (function(){
     const canvas = document.getElementById('hero-three');
-    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
     const heroSection = document.querySelector('.hero');
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
     renderer.setSize(heroSection.offsetWidth, heroSection.offsetHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, heroSection.offsetWidth/heroSection.offsetHeight, 0.1, 100);
-    camera.position.z = 4;
+    camera.position.z = 5;
+    camera.position.y = 0.5;
 
-    // Shader material sphere
-    const vertexShader = `
-        uniform float uTime;
-        varying vec2 vUv;
+    // === BUILD GEAR SHAPE ===
+    function createGearShape(outerR, innerR, teeth, toothDepth, toothWidth) {
+        const shape = new THREE.Shape();
+        const anglePerTooth = (Math.PI * 2) / teeth;
+        const halfTooth = anglePerTooth * toothWidth;
+
+        for (let i = 0; i < teeth; i++) {
+            const a = i * anglePerTooth;
+            // Valley start
+            const v1x = Math.cos(a - halfTooth) * innerR;
+            const v1y = Math.sin(a - halfTooth) * innerR;
+            // Tooth outer start
+            const t1x = Math.cos(a - halfTooth * 0.6) * outerR;
+            const t1y = Math.sin(a - halfTooth * 0.6) * outerR;
+            // Tooth outer end
+            const t2x = Math.cos(a + halfTooth * 0.6) * outerR;
+            const t2y = Math.sin(a + halfTooth * 0.6) * outerR;
+            // Valley end
+            const v2x = Math.cos(a + halfTooth) * innerR;
+            const v2y = Math.sin(a + halfTooth) * innerR;
+            // Next valley start
+            const nextA = (i + 1) * anglePerTooth;
+            const nv1x = Math.cos(nextA - halfTooth) * innerR;
+            const nv1y = Math.sin(nextA - halfTooth) * innerR;
+
+            if (i === 0) shape.moveTo(v1x, v1y);
+            else shape.lineTo(v1x, v1y);
+
+            shape.lineTo(t1x, t1y);
+            shape.lineTo(t2x, t2y);
+            shape.lineTo(v2x, v2y);
+            // Arc along inner radius to next tooth
+            // Simple line for now
+            shape.lineTo(nv1x, nv1y);
+        }
+        shape.closePath();
+
+        // Center hole
+        const holePath = new THREE.Path();
+        const holeR = innerR * 0.45;
+        holePath.absarc(0, 0, holeR, 0, Math.PI * 2, true);
+        shape.holes.push(holePath);
+
+        return shape;
+    }
+
+    const gearShape = createGearShape(1.6, 1.25, 16, 0.35, 0.35);
+    const extrudeSettings = { depth: 0.35, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 3 };
+    const gearGeo = new THREE.ExtrudeGeometry(gearShape, extrudeSettings);
+    gearGeo.center();
+
+    // Metallic shader
+    const gearVertShader = `
         varying vec3 vNormal;
         varying vec3 vPosition;
+        varying vec2 vUv;
         void main(){
             vUv = uv;
-            vNormal = normal;
-            vec3 pos = position;
-            float displacement = sin(pos.x * 4.0 + uTime * 1.2) * sin(pos.y * 3.0 + uTime * 0.8) * sin(pos.z * 5.0 + uTime) * 0.15;
-            pos += normal * displacement;
-            vPosition = pos;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            vNormal = normalize(normalMatrix * normal);
+            vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `;
-    const fragmentShader = `
+    const gearFragShader = `
         uniform float uTime;
-        varying vec2 vUv;
         varying vec3 vNormal;
         varying vec3 vPosition;
+        varying vec2 vUv;
         void main(){
-            vec3 blue1 = vec3(0.0, 0.64, 1.0);
-            vec3 blue2 = vec3(0.0, 0.15, 0.4);
-            vec3 cyan = vec3(0.0, 0.9, 0.9);
-            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
-            float gradient = sin(vUv.y * 8.0 + uTime * 0.5) * 0.5 + 0.5;
-            float wave = sin(vPosition.x * 5.0 + vPosition.y * 3.0 + uTime) * 0.5 + 0.5;
-            vec3 color = mix(blue2, blue1, gradient);
-            color = mix(color, cyan, fresnel * 0.6);
-            color += vec3(0.0, 0.3, 0.5) * wave * 0.3;
-            float alpha = 0.7 + fresnel * 0.3;
+            vec3 viewDir = normalize(-vPosition);
+            float fresnel = pow(1.0 - max(dot(vNormal, viewDir), 0.0), 3.0);
+
+            // Base metallic color — dark steel blue
+            vec3 baseColor = vec3(0.12, 0.16, 0.22);
+            // Accent blue highlight
+            vec3 accentColor = vec3(0.0, 0.64, 1.0);
+            // Specular
+            vec3 lightDir = normalize(vec3(1.0, 1.0, 2.0));
+            float spec = pow(max(dot(reflect(-lightDir, vNormal), viewDir), 0.0), 64.0);
+            float spec2 = pow(max(dot(reflect(-normalize(vec3(-1.0, 0.5, 1.0)), vNormal), viewDir), 0.0), 32.0);
+
+            // Animated blue accent sweep
+            float sweep = sin(vPosition.x * 2.0 + vPosition.y * 2.0 + uTime * 1.5) * 0.5 + 0.5;
+
+            vec3 color = baseColor;
+            color += accentColor * fresnel * 0.7;
+            color += vec3(0.8, 0.9, 1.0) * spec * 0.8;
+            color += accentColor * spec2 * 0.4;
+            color += accentColor * sweep * 0.08;
+
+            // Edge glow
+            color += accentColor * pow(fresnel, 2.0) * 0.3;
+
+            float alpha = 0.92 + fresnel * 0.08;
             gl_FragColor = vec4(color, alpha);
         }
     `;
 
-    const sphereGeo = new THREE.IcosahedronGeometry(1.4, 32);
-    const shaderMat = new THREE.ShaderMaterial({
-        vertexShader,
-        fragmentShader,
+    const gearMat = new THREE.ShaderMaterial({
+        vertexShader: gearVertShader,
+        fragmentShader: gearFragShader,
         uniforms: { uTime: { value: 0 } },
         transparent: true,
-        wireframe: false,
         side: THREE.DoubleSide
     });
-    const sphere = new THREE.Mesh(sphereGeo, shaderMat);
-    scene.add(sphere);
+
+    const gear = new THREE.Mesh(gearGeo, gearMat);
+    gear.rotation.x = Math.PI * 0.15;
+    scene.add(gear);
+
+    // Inner ring detail
+    const innerRingGeo = new THREE.TorusGeometry(0.55, 0.03, 16, 64);
+    const innerRingMat = new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.5});
+    const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
+    innerRing.rotation.x = Math.PI * 0.15;
+    scene.add(innerRing);
 
     // Wireframe overlay
-    const wireGeo = new THREE.IcosahedronGeometry(1.45, 8);
-    const wireMat = new THREE.MeshBasicMaterial({
-        color: 0x00A3FF,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.12
-    });
-    const wireframe = new THREE.Mesh(wireGeo, wireMat);
-    scene.add(wireframe);
+    const wireGeo = new THREE.ExtrudeGeometry(gearShape, { ...extrudeSettings, depth: 0.36 });
+    wireGeo.center();
+    const wireMat = new THREE.MeshBasicMaterial({color: 0x00A3FF, wireframe: true, transparent: true, opacity: 0.06});
+    const wireGear = new THREE.Mesh(wireGeo, wireMat);
+    wireGear.rotation.x = Math.PI * 0.15;
+    scene.add(wireGear);
 
-    // Outer glow ring
-    const ringGeo = new THREE.TorusGeometry(1.8, 0.01, 16, 100);
-    const ringMat = new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent:true, opacity:0.3});
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    scene.add(ring);
+    // Orbital rings
+    const ring1 = new THREE.Mesh(
+        new THREE.TorusGeometry(2.2, 0.008, 16, 128),
+        new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.25})
+    );
+    ring1.rotation.x = Math.PI * 0.4;
+    scene.add(ring1);
 
     const ring2 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.0, 0.008, 16, 100),
-        new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent:true, opacity:0.15})
+        new THREE.TorusGeometry(2.5, 0.006, 16, 128),
+        new THREE.MeshBasicMaterial({color: 0x00A3FF, transparent: true, opacity: 0.12})
     );
-    ring2.rotation.x = Math.PI * 0.3;
+    ring2.rotation.x = Math.PI * 0.6;
+    ring2.rotation.y = Math.PI * 0.2;
     scene.add(ring2);
 
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', (e)=>{
-        mouseX = (e.clientX/window.innerWidth - 0.5)*2;
-        mouseY = (e.clientY/window.innerHeight - 0.5)*2;
+    // Grid floor (holographic workshop floor)
+    const gridGeo = new THREE.PlaneGeometry(20, 20, 40, 40);
+    const gridMat = new THREE.ShaderMaterial({
+        transparent: true,
+        uniforms: { uTime: { value: 0 } },
+        vertexShader: `
+            varying vec2 vUv;
+            void main(){
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform float uTime;
+            varying vec2 vUv;
+            void main(){
+                vec2 grid = abs(fract(vUv * 20.0 - 0.5) - 0.5) / fwidth(vUv * 20.0);
+                float line = min(grid.x, grid.y);
+                float g = 1.0 - min(line, 1.0);
+                float dist = length(vUv - 0.5) * 2.0;
+                float fade = 1.0 - smoothstep(0.2, 0.8, dist);
+                float pulse = sin(uTime * 0.5) * 0.3 + 0.7;
+                gl_FragColor = vec4(0.0, 0.64, 1.0, g * fade * 0.12 * pulse);
+            }
+        `,
+        side: THREE.DoubleSide
+    });
+    const grid = new THREE.Mesh(gridGeo, gridMat);
+    grid.rotation.x = -Math.PI * 0.5;
+    grid.position.y = -2.2;
+    scene.add(grid);
+
+    // Scroll-triggered parallax offset
+    let scrollOffset = 0;
+    window.addEventListener('scroll', () => {
+        scrollOffset = window.scrollY * 0.002;
     });
 
     function animateHero(){
         requestAnimationFrame(animateHero);
         const t = performance.now() * 0.001;
-        shaderMat.uniforms.uTime.value = t;
-        sphere.rotation.y = t * 0.15 + mouseX * 0.3;
-        sphere.rotation.x = Math.sin(t * 0.1) * 0.2 + mouseY * 0.2;
-        wireframe.rotation.y = -t * 0.1;
-        wireframe.rotation.x = t * 0.05;
-        ring.rotation.z = t * 0.2;
-        ring2.rotation.z = -t * 0.15;
+        gearMat.uniforms.uTime.value = t;
+        gridMat.uniforms.uTime.value = t;
+
+        // Rotate gear
+        gear.rotation.y = t * 0.2 + mouseX * 0.3;
+        gear.rotation.x = Math.PI * 0.15 + Math.sin(t * 0.15) * 0.1 + mouseY * 0.15;
+        gear.position.y = -scrollOffset;
+
+        wireGear.rotation.y = gear.rotation.y;
+        wireGear.rotation.x = gear.rotation.x;
+        wireGear.position.y = gear.position.y;
+
+        innerRing.rotation.y = gear.rotation.y;
+        innerRing.rotation.x = gear.rotation.x;
+        innerRing.position.y = gear.position.y;
+
+        ring1.rotation.z = t * 0.15;
+        ring1.position.y = gear.position.y;
+        ring2.rotation.z = -t * 0.1;
+        ring2.position.y = gear.position.y;
+
+        grid.position.y = -2.2 - scrollOffset;
+
         renderer.render(scene, camera);
     }
     animateHero();
@@ -959,27 +1092,62 @@ document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox()
 const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobile-menu');
 hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');mobileMenu.classList.toggle('active')});
 function closeMenu(){hamburger.classList.remove('active');mobileMenu.classList.remove('active')}
-
 window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
 
-// Fade-in observer
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
-document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
-
-// Counter animation
-const counterObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const el=e.target;if(el.dataset.static)return;counterObs.unobserve(el);const target=parseFloat(el.dataset.target),decimal=el.dataset.decimal==='true',duration=2000,start=performance.now();
-function update(now){const p=Math.min((now-start)/duration,1),eased=1-Math.pow(1-p,3),val=eased*target;el.textContent=decimal?val.toFixed(1):Math.floor(val)+'+';if(p<1)requestAnimationFrame(update)}requestAnimationFrame(update)}})},{threshold:0.5});
-document.querySelectorAll('.stat-number').forEach(el=>counterObs.observe(el));
-
-// GSAP hero animation
+// ============ SCROLL ANIMATIONS ============
 gsap.registerPlugin(ScrollTrigger);
-gsap.from('.hero-content',{opacity:0,y:60,duration:1.2,ease:'power3.out'});
-gsap.from('.hero-label',{opacity:0,y:20,duration:.8,delay:.3,ease:'power2.out'});
-gsap.from('.hero h1',{opacity:0,y:30,duration:1,delay:.5,ease:'power2.out'});
-gsap.from('.hero-stats-line',{opacity:0,y:20,duration:.8,delay:.7,ease:'power2.out'});
-gsap.from('.hero-buttons',{opacity:0,y:20,duration:.8,delay:.9,ease:'power2.out'});
 
-gsap.to('.hero-bg-img',{y:100,scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}});
+// Fade-in observer
+const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1, rootMargin: '0px 0px -50px 0px'});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// Service cards — staggered entrance
+const cardObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if(e.isIntersecting){
+            const delay = parseInt(e.target.dataset.delay || 0) * 100;
+            setTimeout(() => e.target.classList.add('visible'), delay);
+            cardObs.unobserve(e.target);
+        }
+    });
+}, {threshold: 0.1, rootMargin: '0px 0px -30px 0px'});
+document.querySelectorAll('.service-card').forEach(el => cardObs.observe(el));
+
+// Counter animation — count up from 0 when scrolled into view
+const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if(e.isIntersecting){
+            const el = e.target;
+            if(el.dataset.static) return;
+            counterObs.unobserve(el);
+            const target = parseFloat(el.dataset.target);
+            const decimal = el.dataset.decimal === 'true';
+            const duration = 2000;
+            const start = performance.now();
+            function update(now){
+                const p = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                const val = eased * target;
+                el.textContent = decimal ? val.toFixed(1) : Math.floor(val) + '+';
+                if(p < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+    });
+}, {threshold: 0.5});
+document.querySelectorAll('.stat-number').forEach(el => counterObs.observe(el));
+
+// GSAP hero entrance
+gsap.from('.hero-content', {opacity:0, y:60, duration:1.2, ease:'power3.out'});
+gsap.from('.hero-label', {opacity:0, y:20, duration:.8, delay:.3, ease:'power2.out'});
+gsap.from('.hero h1', {opacity:0, y:30, duration:1, delay:.5, ease:'power2.out'});
+gsap.from('.hero-stats-line', {opacity:0, y:20, duration:.8, delay:.7, ease:'power2.out'});
+gsap.from('.hero-buttons', {opacity:0, y:20, duration:.8, delay:.9, ease:'power2.out'});
+
+// Hero background parallax
+gsap.to('.hero-bg-img', {y:100, scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:1}});
 </script>
 </body>
 </html>
